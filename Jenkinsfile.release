@@ -59,10 +59,10 @@ BALROG_CREDENTIAL_ID
 
 stage("Copy XPI") {
     CQZ_VERSION=sh(returnStdout: true, script: "cat ./mozilla-release/browser/config/version_display.txt").trim()
-    UPLOAD_PATH="s3://repository.cliqz.com/dist/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/$CQZ_BUILD_ID/cliqz@cliqz.com.xpi"
-    HTTPSE_UPLOAD_PATH="s3://repository.cliqz.com/dist/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/$CQZ_BUILD_ID/https-everywhere@cliqz.com.xpi"
-    GHOSTERY_UPLOAD_PATH="s3://repository.cliqz.com/dist/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/$CQZ_BUILD_ID/firefox@ghostery.com.xpi"
-    LAST_BUILDID_PATH="s3://repository.cliqz.com/dist/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/lastbuildid"
+    UPLOAD_PATH="s3://repository.cliqz.com/ghostery/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/$CQZ_BUILD_ID/cliqz@cliqz.com.xpi"
+    HTTPSE_UPLOAD_PATH="s3://repository.cliqz.com/ghostery/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/$CQZ_BUILD_ID/https-everywhere@cliqz.com.xpi"
+    GHOSTERY_UPLOAD_PATH="s3://repository.cliqz.com/ghostery/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/$CQZ_BUILD_ID/firefox@ghostery.com.xpi"
+    LAST_BUILDID_PATH="s3://repository.cliqz.com/ghostery/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/lastbuildid"
 
     withCredentials([[
                 $class: 'UsernamePasswordMultiBinding',
@@ -237,8 +237,8 @@ def uploadBeta(build_id, cqz_version) {
       for (inst_suff in installers_suffixes) {
           full_installer_path = "cliqz-${cqz_version}.${locale}.${inst_suff}"
           installer_path = "cliqz.${locale}.${inst_suff}"
-          beta_path = "repository.cliqz.com/dist/beta/${cqz_version}/${build_id}/${full_installer_path}"
-          latest_beta_path = "repository.cliqz.com/dist/beta/latest/${installer_path}"
+          beta_path = "repository.cliqz.com/ghostery/beta/${cqz_version}/${build_id}/${full_installer_path}"
+          latest_beta_path = "repository.cliqz.com/ghostery/beta/latest/${installer_path}"
 
           sh "aws s3 cp s3://${beta_path} s3://${latest_beta_path}"
       }
@@ -281,7 +281,7 @@ def sendEmail(String buildStatus) {
   def bodytxt = '$PROJECT_NAME - Build # $BUILD_NUMBER - ' + buildStatus + ':'
   bodytxt += '\n\nCheck console output at http://magrathea:8080/job/' + env.JOB_NAME + '/' + env.BUILD_NUMBER + '/ to view the results.'
   bodytxt += '\n\nBuildID: ' + CQZ_BUILD_ID
-  bodytxt += '\n\nUploaded to: http://repository.cliqz.com/?prefix=dist/' + CQZ_RELEASE_CHANNEL + '/' + CQZ_VERSION + '/' + CQZ_BUILD_ID
+  bodytxt += '\n\nUploaded to: http://repository.cliqz.com/?prefix=ghostery/' + CQZ_RELEASE_CHANNEL + '/' + CQZ_VERSION + '/' + CQZ_BUILD_ID
   bodytxt += '\n\n\n $CHANGES_SINCE_LAST_SUCCESS'
 
   emailext(
