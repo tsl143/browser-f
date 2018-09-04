@@ -78,7 +78,7 @@ export S3_BUCKET_SERVICE=cliqz-browser-data
 
 # check CQZ_BUILD_ID and try to obtain, if not specified
 if [ -z $CQZ_BUILD_ID ]; then
-  export CQZ_BUILD_ID="`wget -qO- https://$S3_BUCKET/dist/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/lastbuildid`"
+  export CQZ_BUILD_ID="`wget -qO- https://$S3_BUCKET/ghostery/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/lastbuildid`"
 fi
 
 if [ -z $CQZ_BUILD_ID ]; then
@@ -91,11 +91,11 @@ export MOZ_BUILD_DATE=$CQZ_BUILD_ID
 
 # set path on S3 with BUILD_ID. From this path we take *.xpi and upload
 # build artifacts back (to locale folder, same as FF)
-export S3_UPLOAD_PATH=`echo dist/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/$MOZ_BUILD_DATE`
+export S3_UPLOAD_PATH=`echo ghostery/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/$MOZ_BUILD_DATE`
 
 # Generate buildsymbols for release and beta builds
 if [ "$CQZ_RELEASE_CHANNEL" == "release" ] || [ "$CQZ_RELEASE_CHANNEL" == "beta" ] ; then
-  export S3_UPLOAD_PATH_SERVICE=`echo cliqzfox/buildsymbols/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/$MOZ_BUILD_DATE`
+  export S3_UPLOAD_PATH_SERVICE=`echo ghostery/buildsymbols/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/$MOZ_BUILD_DATE`
 fi
 
 OBJ_DIR=$MOZ_OBJDIR
