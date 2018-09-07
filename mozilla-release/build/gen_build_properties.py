@@ -19,7 +19,7 @@ class BuildProperties:
     def __init__(self):
         self.properties = {
                 "properties": {
-                    "appName": "Firefox",
+                    "appName": "Ghostery",
                     "buildid": "",
                     "completeMarFilename": "",
                     "completeMarHash": "",
