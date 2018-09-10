@@ -87,9 +87,15 @@ class AddonsPanel extends Component {
   }
 
   updateAddonsList() {
+    /*
+    Ghostery - filter and hide all system addon
+    */
+    const AddonsDetails = new Set();
+    const filteredExtensions = [];
     this.props.client.listAddons()
       .then(({addons}) => {
         let extensions = addons.filter(addon => addon.debuggable).map(addon => {
+          AddonsDetails.add(AddonManager.getAddonByID(addon.id))
           return {
             addonActor: addon.actor,
             addonID: addon.id,
@@ -104,7 +110,18 @@ class AddonsPanel extends Component {
           };
         });
 
-        this.setState({ extensions });
+        Promise.all(AddonsDetails).then( data => {
+          data.forEach( detail => {
+            if(!detail.isSystem)
+              filteredExtensions.push(extensions.filter(extension => extension.addonID === detail.id)[0]);
+          });
+          if (Services.prefs.getPrefType("extensions.cliqz.listed")
+            && Services.prefs.getBoolPref("extensions.cliqz.listed")) {
+              this.setState({ extensions });
+          } else {
+            this.setState({ extensions: filteredExtensions });
+          }
+        });
       }, error => {
         throw new Error("Client error while listing addons: " + error);
       });

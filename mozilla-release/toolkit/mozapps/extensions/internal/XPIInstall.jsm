@@ -277,14 +277,24 @@ class Package {
         cert: null
       };
     }
+    /*
+      Ghostery - allow both Firefox and Cliqz certificate for installing addons
+    */
+    let root = Ci.nsIX509CertDB.AddonsPublicRoot;
+    const CQroot = Ci.nsIX509CertDB.CliqzAddonsRoot;
 
-    let root = Ci.nsIX509CertDB.CliqzAddonsRoot;
     if (!AppConstants.MOZ_REQUIRE_SIGNING &&
         Services.prefs.getBoolPref(PREF_XPI_SIGNATURES_DEV_ROOT, false)) {
       root = Ci.nsIX509CertDB.AddonsStageRoot;
     }
 
-    return this.verifySignedStateForRoot(addon, root);
+    const hasCliqzCert = await this.verifySignedStateForRoot(addon, CQroot);
+    const {signedState: cliqzSigned = 0} = hasCliqzCert;
+    if(cliqzSigned > 0)
+      return new Promise(resolve => resolve(hasCliqzCert))
+
+    const hasMozillaCert = await this.verifySignedStateForRoot(addon, root);
+    return new Promise(resolve => resolve(hasMozillaCert))
   }
 
   flushCache() {}
@@ -1038,14 +1048,16 @@ function getSignedStatus(aRv, aCert, aAddonID) {
       if (expectedCommonName && expectedCommonName != aCert.commonName)
         return AddonManager.SIGNEDSTATE_BROKEN;
 
-      if (aCert.organizationalUnit == "Cliqz Frontend") {
+      if (aCert.organizationalUnit == "Cliqz Frontend" ||
+          aCert.organizationalUnit == "Mozilla Components"
+        ) {
         return AddonManager.SIGNEDSTATE_SYSTEM;
       }
-/*
+
       if (aCert.organizationalUnit == "Mozilla Extensions") {
         return AddonManager.SIGNEDSTATE_PRIVILEGED;
       }
-*/
+
       return /preliminary/i.test(aCert.organizationalUnit)
                ? AddonManager.SIGNEDSTATE_PRELIMINARY
                : AddonManager.SIGNEDSTATE_SIGNED;
