@@ -282,6 +282,20 @@ class Package {
       * Ghostery - allow both Firefox and Cliqz certificate for installing addons
       * Prevent pre integrated addons from installing - Cliqz/Ghostery/HttpsEverywhere
     */
+
+    const rootCliqz = Ci.nsIX509CertDB.CliqzAddonsRoot;
+    let rootFirefox = Ci.nsIX509CertDB.AddonsPublicRoot;
+
+    if (!AppConstants.MOZ_REQUIRE_SIGNING &&
+        Services.prefs.getBoolPref(PREF_XPI_SIGNATURES_DEV_ROOT, false)) {
+      rootFirefox = Ci.nsIX509CertDB.AddonsStageRoot;
+    }
+
+    const CliqzSigned = await this.verifySignedStateForRoot(addon, rootCliqz);
+    const {signedState: isCliqzSigned} = CliqzSigned;
+
+    if (isCliqzSigned > 0) return CliqzSigned;
+
     const PREF_CLIQZ_ADDONS = 'extensions.cliqz.integrated';
     if(Services.prefs.getPrefType(PREF_CLIQZ_ADDONS) == Services.prefs.PREF_STRING) {
       const integratedAddons = Services.prefs.getCharPref(PREF_CLIQZ_ADDONS) || '';
@@ -293,18 +307,7 @@ class Package {
       }
     }
 
-    const rootCliqz = Ci.nsIX509CertDB.CliqzAddonsRoot;
-    let rootFirefox = Ci.nsIX509CertDB.AddonsPublicRoot;
-
-    if (!AppConstants.MOZ_REQUIRE_SIGNING &&
-        Services.prefs.getBoolPref(PREF_XPI_SIGNATURES_DEV_ROOT, false)) {
-      rootFirefox = Ci.nsIX509CertDB.AddonsStageRoot;
-    }
-
-    return Promise.all([
-      this.verifySignedStateForRoot(addon, rootCliqz),
-      this.verifySignedStateForRoot(addon, rootFirefox)
-    ]).then(states => states.sort((a, b) => b.signedState - a.signedState)[0]);
+    return this.verifySignedStateForRoot(addon, rootFirefox)
   }
 
   flushCache() {}
