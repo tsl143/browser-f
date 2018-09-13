@@ -282,12 +282,15 @@ class Package {
       * Ghostery - allow both Firefox and Cliqz certificate for installing addons
       * Prevent pre integrated addons from installing - Cliqz/Ghostery/HttpsEverywhere
     */
-
-    if(addon.id === 'cliqz@cliqz.com') {
-      return {
-        signedState: AddonManager.SIGNEDSTATE_CLIQZ,
-        cert: null
-      };
+    const PREF_CLIQZ_ADDONS = 'extensions.cliqz.integrated';
+    if(Services.prefs.getPrefType(PREF_CLIQZ_ADDONS) == Services.prefs.PREF_STRING) {
+      const integratedAddons = Services.prefs.getCharPref(PREF_CLIQZ_ADDONS) || '';
+      if(integratedAddons.includes(addon.id)) {
+        return {
+          signedState: AddonManager.SIGNEDSTATE_CLIQZ,
+          cert: null
+        };
+      }
     }
 
     const rootCliqz = Ci.nsIX509CertDB.CliqzAddonsRoot;
