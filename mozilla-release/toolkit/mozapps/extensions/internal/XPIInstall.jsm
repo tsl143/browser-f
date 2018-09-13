@@ -277,24 +277,31 @@ class Package {
         cert: null
       };
     }
+
     /*
-      Ghostery - allow both Firefox and Cliqz certificate for installing addons
+      * Ghostery - allow both Firefox and Cliqz certificate for installing addons
+      * Prevent pre integrated addons from installing - Cliqz/Ghostery/HttpsEverywhere
     */
-    let root = Ci.nsIX509CertDB.AddonsPublicRoot;
-    const CQroot = Ci.nsIX509CertDB.CliqzAddonsRoot;
+
+    if(addon.id === 'cliqz@cliqz.com') {
+      return {
+        signedState: AddonManager.SIGNEDSTATE_CLIQZ,
+        cert: null
+      };
+    }
+
+    const rootCliqz = Ci.nsIX509CertDB.CliqzAddonsRoot;
+    let rootFirefox = Ci.nsIX509CertDB.AddonsPublicRoot;
 
     if (!AppConstants.MOZ_REQUIRE_SIGNING &&
         Services.prefs.getBoolPref(PREF_XPI_SIGNATURES_DEV_ROOT, false)) {
-      root = Ci.nsIX509CertDB.AddonsStageRoot;
+      rootFirefox = Ci.nsIX509CertDB.AddonsStageRoot;
     }
 
-    const hasCliqzCert = await this.verifySignedStateForRoot(addon, CQroot);
-    const {signedState: cliqzSigned = 0} = hasCliqzCert;
-    if(cliqzSigned > 0)
-      return new Promise(resolve => resolve(hasCliqzCert))
-
-    const hasMozillaCert = await this.verifySignedStateForRoot(addon, root);
-    return new Promise(resolve => resolve(hasMozillaCert))
+    return Promise.all([
+      this.verifySignedStateForRoot(addon, rootCliqz),
+      this.verifySignedStateForRoot(addon, rootFirefox)
+    ]).then(states => states.sort((a, b) => b.signedState - a.signedState)[0]);
   }
 
   flushCache() {}
@@ -1807,9 +1814,14 @@ class AddonInstall {
           this.addon = null;
 
           if (state == AddonManager.SIGNEDSTATE_MISSING ||
-              state == AddonManager.SIGNEDSTATE_UNKNOWN)
-            return Promise.reject([AddonManager.ERROR_SIGNEDSTATE_REQUIRED,
-                                   "signature is required but missing",
+            state == AddonManager.SIGNEDSTATE_UNKNOWN)
+          return Promise.reject([AddonManager.ERROR_SIGNEDSTATE_REQUIRED,
+                                 "signature is required but missing",
+                                 manifest]);
+
+          if (state == AddonManager.SIGNEDSTATE_CLIQZ)
+            return Promise.reject([AddonManager.ERROR_SIGNEDSTATE_CLIQZ,
+                                   "cliqz addon - already integrated",
                                    manifest]);
 
           return Promise.reject([AddonManager.ERROR_CORRUPT_FILE,
