@@ -213,7 +213,7 @@ const CustomizableWidgets = [
     tooltiptext: "add-ons-button.tooltiptext3",
     onCommand(aEvent) {
       let win = aEvent.target.ownerGlobal;
-      win.BrowserOpenAddonsMgr("addons://list/plugin");
+      win.BrowserOpenAddonsMgr();
     }
   }, {
     id: "zoom-controls",
