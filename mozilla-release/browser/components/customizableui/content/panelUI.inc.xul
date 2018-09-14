@@ -29,7 +29,13 @@
        when hover styles overlap. See https://bugzilla.mozilla.org/show_bug.cgi?id=1378427 .
        -->
   <menupopup id="customizationPanelItemContextMenu"
-             onpopupshowing="gCustomizeMode.onPanelContextMenuShowing(event)">
+             onpopupshowing="gCustomizeMode.onPanelContextMenuShowing(event); UpdateManageExtension(this)">
+    <menuitem oncommand="openAboutAddonsForContextAction(this.parentElement)"
+              accesskey="&customizeMenu.manageExtension.accesskey;"
+              label="&customizeMenu.manageExtension.label;"
+              contexttype="toolbaritem"
+              class="customize-context-manageExtension"/>
+    <menuseparator/>
     <menuitem oncommand="gCustomizeMode.addToPanel(document.popupNode)"
               id="customizationPanelItemContextMenuPin"
               accesskey="&customizeMenu.pinToOverflowMenu.accesskey;"
@@ -207,8 +213,21 @@
             <observes element="sync-status" attribute="onmouseover"/>
           </toolbarbutton>
         </toolbaritem>
-#endif
         <toolbarseparator class="sync-ui-item"/>
+        <toolbaritem closemenu="none">
+          <toolbarbutton id="appMenu-tp-label"
+                         tooltiptext="&trackingProtection.tooltip;"
+                         class="subviewbutton subviewbutton-iconic"
+                         oncommand="TrackingProtection.openPreferences('appMenu-trackingprotection'); PanelUI.hide();"
+                         label="&trackingProtection.title;"/>
+          <toolbarseparator orient="vertical"/>
+          <toolbarbutton id="appMenu-tp-toggle"
+                         class="subviewkeynav"
+                         observes="trackingProtectionBroadcaster"
+                         oncommand="TrackingProtection.onGlobalToggleCommand();" />
+        </toolbaritem>
+#endif
+        <toolbarseparator />
         <toolbarbutton id="appMenu-new-window-button"
                        class="subviewbutton subviewbutton-iconic"
                        label="&newNavigatorCmd.label;"
@@ -219,6 +238,12 @@
                        label="&newPrivateWindow.label;"
                        key="key_privatebrowsing"
                        command="Tools:PrivateBrowsing"/>
+#if CQZ_TOR_MODE
+        <toolbarbutton id="appMenu-cliqz-torbrowsing-button"
+                       label="&torbrowsing.panelUI.label;"
+                       class="subviewbutton subviewbutton-iconic"
+                       command="cmd_newTorWindow"/>
+#endif
         <toolbarbutton id="appMenuRestoreLastSession"
                        label="&appMenuHistory.restoreSession.label;"
                        class="subviewbutton subviewbutton-iconic"

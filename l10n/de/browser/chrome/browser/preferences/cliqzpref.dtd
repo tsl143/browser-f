@@ -16,10 +16,10 @@
 <!ENTITY enableSafeBrowsingLearnMore.label "Weitere Informationen">
 
 <!-- Forget mode -->
-<!ENTITY  forgetMode.caption "Vergessen Modus">
+<!ENTITY  forgetMode.caption "Automatischer Vergessen Modus">
 <!ENTITY  forgetMode.enableCheckboxLabel "Automatischen Vergessen Modus aktivieren">
-<!ENTITY  forgetMode.explanation1 "Der automatische Vergessen Modus öffnet Websites mit expliziten (pornographischen) Inhalten automatisch im vergessen Modus, so dass sie nicht in der Chronik gespeichert werden und keine temporären Dateien, inklusive Cookies, auf dem Computer hinterlassen.">
-<!ENTITY  forgetMode.explanation2 "Im Tab Kontext-Menü kannst du selbst wählen, welche Websites automatisch im Vergessen Modus geöffnet werden sollen oder auch nicht. Das Tab Kontext-Menü öffnet sich durch einen Klick mit der rechten Maustaste auf den aktuellen Tab.">
+<!ENTITY  forgetMode.explanation1 "Der automatische Vergessen Modus öffnet Websites mit expliziten (pornographischen) Inhalten automatisch im Vergessen Modus, so dass sie nicht in der Chronik gespeichert werden. Für umfassendere Privatsphäre ist es besser, entsprechende Websites immer in einem <b>Vergessen Fenster</b> zu öffnen, weil dort u.a. temporäre Dateien zuverlässiger entfernt werden können.">
+<!ENTITY  forgetMode.explanation2 "Im Tab-Kontextmenü kannst du selbst wählen, welche Websites automatisch im Vergessen Modus geöffnet werden sollen. Das Tab-Kontextmenü öffnet sich durch einen Klick mit der rechten Maustaste auf den geöffneten Tab.">
 <!ENTITY  forgetMode.learnMore "Mehr erfahren">
 
 <!-- Cliqz addition -->
@@ -41,6 +41,13 @@
 <!ENTITY  httpsEverywhereDesc.label      "HTTPS Everywhere ist ein Dritt-Anbieter-Service, der verschlüsselte Website-Verbindungen anfordert. ">
 <!ENTITY  httpsEverywhereMore.label      "Erfahre mehr">
 
+<!ENTITY  consentric.label          "re:consent">
+<!ENTITY  consentric.enable         "re:consent aktivieren">
+<!ENTITY  consentric.accesskey      "C">
+<!ENTITY  consentric.desc1          "re:consent zeigt auf übersichtliche Weise welche personenbezogenen Daten von Websites">
+<!ENTITY  consentric.desc2          "verarbeitet werden und macht es dem Nutzer leicht zuzustimmen oder abzulehnen.">
+<!ENTITY  consentric.more           "Erfahre mehr">
+
 <!ENTITY  passwordManager.title          "Passwort Manager">
 <!ENTITY  passwordManager.desc1          "Cliqz unterstützt die Einbindung von ausgewählten und geprüften Passwort-Manager Anwendungen.">
 <!ENTITY  passwordManager.desc2          "Diese Anwendungen wurden nicht von Cliqz entwickelt. Cliqz hat keine Kontrolle darüber, auf welche Daten sie Zugriff haben.">
@@ -48,8 +55,6 @@
 <!ENTITY  ghostery.title                 "Erweiterte Kontrolle der Privatsphäre">
 <!ENTITY  ghostery.desc1                 "Ghostery weist auf versteckte Dienste hin, die im Hintergrund private Daten an">
 <!ENTITY  ghostery.desc2                 "Seitenbetreiber übermitteln. Auf Wunsch können diese blockiert werden.">
-
-<!ENTITY startupUserHomePage.label "Startseite anzeigen">
 
 <!-- LOCALIZATION NOTE (abouthome.defaultSnippet1.v1):
      text in <a/> will be linked to the Firefox features page on mozilla.com

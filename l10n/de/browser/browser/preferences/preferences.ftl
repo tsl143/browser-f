@@ -39,8 +39,8 @@ search-input-box =
         }
 policies-notice =
     { PLATFORM() ->
-        [windows] Ihre Organisation hat das Ändern einiger Einstellungen deaktiviert.
-       *[other] Ihre Organisation hat das Ändern einiger Einstellungen deaktiviert.
+        [windows] Deine Organisation hat das Ändern einiger Einstellungen deaktiviert.
+       *[other] Deine Organisation hat das Ändern einiger Einstellungen deaktiviert.
     }
 pane-general-title = Allgemein
 category-general =
@@ -60,7 +60,10 @@ category-privacy =
 pane-sync-title = Firefox-Konto
 category-sync =
     .tooltiptext = { pane-sync-title }
-help-button-label = Hilfe für { -brand-short-name }
+pane-connect-title = Connect
+category-connect =
+    .tooltiptext = { pane-connect-title }
+help-button-label = Mozilla Support
 focus-search =
     .key = f
 close-button =
@@ -108,7 +111,7 @@ extension-controlled-proxy-config = Die Erweiterung "<img data-l10n-name="icon"/
 #
 # <img data-l10n-name="addons-icon"/> will be replaced with Add-ons icon
 # <img data-l10n-name="menu-icon"/> will be replaced with Menu icon
-extension-controlled-enable = Um die Erweiterung zu aktivieren, öffnen Sie das <img data-l10n-name="menu-icon"/> Menü und dann <img data-l10n-name="addons-icon"/> Add-ons.
+extension-controlled-enable = Um die Erweiterung zu aktivieren, öffne das <img data-l10n-name="menu-icon"/> Menü und dann <img data-l10n-name="addons-icon"/> Add-ons.
 
 ## Preferences UI Search Results
 
@@ -119,7 +122,7 @@ search-results-empty-message =
         [windows] Keine Treffer in den Einstellungen für "<span data-l10n-name="query"></span>".
        *[other] Keine Treffer in den Einstellungen für "<span data-l10n-name="query"></span>".
     }
-search-results-help-link = Benötigen Sie Hilfe? Dann besuchen Sie die <a data-l10n-name="url">Hilfeseite für { -brand-short-name }</a>.
+search-results-help-link = Benötigst du Hilfe? Dann besuche die <a data-l10n-name="url">Hilfeseite für { -brand-short-name }</a>.
 
 ## General Section
 
@@ -128,14 +131,14 @@ startup-header = Start
 # since this setting is only exposed in Firefox Developer Edition
 separate-profile-mode =
     .label = Gleichzeitiges Ausführen von { -brand-short-name } und Firefox erlauben
-use-firefox-sync = Tipp: Dabei werden getrennte Profile verwendet. Verwenden Sie { -sync-brand-short-name }, um Daten zwischen diesen zu synchronisieren.
+use-firefox-sync = Tipp: Dabei werden getrennte Profile verwendet. Verwende Sync, um Daten zwischen diesen zu synchronisieren.
 get-started-not-logged-in = Bei { -sync-brand-short-name } anmelden…
 get-started-configured = { -sync-brand-short-name }-Einstellungen öffnen
 always-check-default =
     .label = Immer überprüfen, ob { -brand-short-name } der Standardbrowser ist
     .accesskey = p
 is-default = { -brand-short-name } ist derzeit der Standardbrowser
-is-not-default = { -brand-short-name } ist nicht Ihr Standardbrowser
+is-not-default = { -brand-short-name } ist nicht dein Standardbrowser
 set-as-my-default-browser =
     .label = Als Standard festlegen…
     .accesskey = g
@@ -150,14 +153,14 @@ startup-prev-session =
 
 startup-restore-previous-session =
     .label = Vorherige Sitzung wiederherstellen
-    .accesskey = V
+    .accesskey = o
 
 disable-extension =
     .label = Erweiterung deaktivieren
 home-page-header = Startseite
 tabs-group-header = Tabs
 ctrl-tab-recently-used-order =
-    .label = Bei Strg+Tab die Tabs nach letzter Nutzung in absteigender Reihenfolge anzeigen
+    .label = Strg+Tab zeigt die Tabs nach letzter Nutzung geordnet an.
     .accesskey = z
 open-new-link-as-tabs =
     .label = Links in Tabs anstatt in neuen Fenstern öffnen
@@ -258,7 +261,7 @@ download-always-ask-where =
     .label = Jedes Mal nachfragen, wo eine Datei gespeichert werden soll
     .accesskey = n
 applications-header = Anwendungen
-applications-description = Legen Sie fest, wie { -brand-short-name } mit Dateien verfährt, die Sie aus dem Web oder aus Anwendungen, die Sie beim Surfen verwenden, herunterladen.
+applications-description = Lege fest, wie { -brand-short-name } mit Dateien verfährt, die du aus dem Web oder aus Anwendungen, die du beim Surfen verwendest, herunterlädst.
 applications-filter =
     .placeholder = Dateitypen oder Anwendungen suchen
 applications-type-column =
@@ -310,8 +313,8 @@ performance-allow-hw-accel =
 performance-limit-content-process-option = Maximale Anzahl an Inhaltsprozessen
     .accesskey = M
 performance-limit-content-process-enabled-desc = Mehr Inhaltsprozesse verbessern die Leistung bei Verwendung mehrerer Tabs, aber nutzen auch mehr Arbeitsspeicher.
-performance-limit-content-process-disabled-desc = Das Ändern der Anzahl der Inhaltsprozesse ist nur in { -brand-short-name } mit mehreren Prozessen möglich. <a>Wie Sie herausfinden, ob Firefox mit mehreren Prozessen ausgeführt wird</a>
-performance-limit-content-process-blocked-desc = Das Ändern der Anzahl der Inhaltsprozesse ist nur in { -brand-short-name } mit mehreren Prozessen möglich. <a data-l10n-name="learn-more">Wie Sie herausfinden, ob Firefox mit mehreren Prozessen ausgeführt wird</a>
+performance-limit-content-process-disabled-desc = Das Ändern der Anzahl der Inhaltsprozesse ist nur in { -brand-short-name } mit mehreren Prozessen möglich. <a>Wie du herausfindest, ob Cliqz mit mehreren Prozessen ausgeführt wird</a>
+performance-limit-content-process-blocked-desc = Das Ändern der Anzahl der Inhaltsprozesse ist nur in { -brand-short-name } mit mehreren Prozessen möglich. <a data-l10n-name="learn-more">Wie du herausfindest, ob Cliqz mit mehreren Prozessen ausgeführt wird</a>
 # Variables:
 #   $num - default value of the `dom.ipc.processCount` pref.
 performance-default-content-process-count =
@@ -349,11 +352,11 @@ network-proxy-connection-settings =
 
 home-new-windows-tabs-header = Neue Fenster und Tabs
 
-home-new-windows-tabs-description2 = Legen Sie fest, was als Homepage sowie in neuen Fenstern und Tabs geöffnet wird.
+home-new-windows-tabs-description2 = Lege fest, was als Startseite sowie in neuen Fenstern und Tabs geöffnet wird.
 
 ## Home Section - Home Page Customization
 
-home-homepage-mode-label = Homepage und neue Fenster
+home-homepage-mode-label = Startseite und neue Fenster
 
 home-newtabs-mode-label = Neue Tabs
 
@@ -400,8 +403,8 @@ search-bar-hidden =
     .label = Adressleiste für Suche und Seitenaufrufe verwenden
 search-bar-shown =
     .label = Suchleiste zur Symbolleiste hinzufügen
-search-engine-default-header = Standardsuchmaschine
-search-engine-default-desc = Wählen Sie Ihre Standardsuchmaschine für die Adress- und Suchleiste.
+search-engine-default-header = Ergänzende Suchmaschine
+search-engine-default-desc = Wähle deine alternative Suchmaschine. Wenn du mit { -brand-short-name }’ Vorschlägen nicht zufrieden bist, siehst du deren Ergebnisse wenn du „Enter“ drückst.
 search-suggestions-option =
     .label = Suchvorschläge anzeigen
     .accesskey = S
@@ -416,8 +419,8 @@ search-show-suggestions-url-bar-option =
 search-show-suggestions-above-history-option =
     .label = In Adressleiste Suchvorschläge vor Einträgen aus der Browser-Chronik anzeigen
 search-suggestions-cant-show = Suchvorschläge werden nicht in der Adressleiste angezeigt, weil { -brand-short-name } angewiesen wurde, keine Chronik zu speichern.
-search-one-click-header = Ein-Klick-Suchmaschinen
-search-one-click-desc = Wählen Sie eine andere Suchmaschine von den unterhalb der Adress- bzw. Suchleiste angezeigten Suchmaschinen, nachdem Sie den Suchbegriff eingegeben haben.
+search-one-click-header = Direkt suchen
+search-one-click-desc = Wähle eine andere Suchmaschine von den unterhalb der Adress- bzw. Suchleiste angezeigten Suchmaschinen, nachdem du den Suchbegriff eingegeben hast.
 search-choose-engine-column =
     .label = Suchmaschine
 search-choose-keyword-column =
@@ -436,8 +439,8 @@ search-find-more-desc = Cliqz unterstützt viele Suchmaschinen aus dem offiziell
 search-keyword-warning-title = Schlüsselwort duplizieren
 # Variables:
 #   $name (String) - Name of a search engine.
-search-keyword-warning-engine = Sie haben ein Schlüsselwort ausgewählt, das bereits von "{ $name }" verwendet wird, bitte wählen Sie ein anderes.
-search-keyword-warning-bookmark = Sie haben ein Schlüsselwort ausgewählt, das bereits von einem Lesezeichen verwendet wird, bitte wählen Sie ein anderes.
+search-keyword-warning-engine = Du hast ein Schlüsselwort ausgewählt, das bereits von "{ $name }" verwendet wird, bitte wähle ein anderes.
+search-keyword-warning-bookmark = Du hast ein Schlüsselwort ausgewählt, das bereits von einem Lesezeichen verwendet wird, bitte wähle ein anderes.
 
 ## Containers Section
 
@@ -580,21 +583,25 @@ history-header = Chronik
 #     This will result in "Firefox" + "Will remember history", etc.
 #   - As a stand-alone message, for example "Firefox history settings:".
 history-remember-label = { -brand-short-name } wird eine Chronik
-    .accesskey = F
+    .accesskey = C
 history-remember-option-all =
     .label = anlegen
 history-remember-option-never =
     .label = niemals anlegen
 history-remember-option-custom =
     .label = nach benutzerdefinierten Einstellungen anlegen
-history-remember-description = { -brand-short-name } wird die Adressen der besuchten Webseiten, Downloads sowie eingebene Formular- und Suchdaten speichern.
-history-dontremember-description = { -brand-short-name } wird dieselben Einstellungen wie im Privaten Modus verwenden und keinerlei Chronik anlegen, während Sie &brandShortName; benutzen.
+history-remember-description = { -brand-short-name } wird die Adressen der besuchten Webseits, Downloads sowie eingebene Formular- und Suchdaten speichern.
+history-dontremember-description = { -brand-short-name } wird dieselben Einstellungen wie im Vergessen Modus verwenden und keinerlei Chronik anlegen, während du &brandShortName; benutzen.
 history-private-browsing-permanent =
-    .label = Immer den Privaten Modus verwenden
-    .accesskey = M
+    .label = Immer den Vergessen Modus verwenden
+    .accesskey = V
 history-remember-option =
     .label = Besuchte Seiten und Download-Chronik speichern
     .accesskey = w
+history-remember-browser-option =
+    .label = Besuchte Seiten und Download-Chronik speichern
+    .accesskey = w
+
 history-remember-search-option =
     .label = Eingegebene Suchbegriffe und Formulardaten speichern
     .accesskey = S
@@ -665,7 +672,7 @@ addressbar-locbar-openpage-option =
 addressbar-suggestions-settings = Einstellungen für Suchvorschläge ändern
 
 ## Privacy Section - Tracking
-
+tracking-header-donottrack = Do Not Track
 tracking-header = Schutz vor Aktivitätenverfolgung
 tracking-desc = Der Schutz vor Aktivitätenverfolgung blockiert nur Systeme, welche Ihr Surfverhalten über mehrere Websites verteilt aufzeichnen. <a data-l10n-name="learn-more">Weitere Informationen zum Schutz Ihrer Privatsphäre und vor Aktivitätenverfolgung</a>
 tracking-mode-label = Schutz vor Aktivitätenverfolgung verwenden, um bekannte Aktivitäten verfolgende Systeme zu blockieren
@@ -673,7 +680,7 @@ tracking-mode-always =
     .label = Immer
     .accesskey = m
 tracking-mode-private =
-    .label = Nur in privaten Fenstern
+    .label = Nur in Vergessen Fenstern
     .accesskey = P
 tracking-mode-never =
     .label = Nie
@@ -708,6 +715,13 @@ permissions-notification = Benachrichtigungen
 permissions-notification-settings =
     .label = Einstellungen…
     .accesskey = E
+permissions-block-autoplay-media =
+    .label = Automatische Wiedergabe von Medien mit Ton durch Websites verhindern
+    .accesskey = W
+
+permissions-block-autoplay-media-exceptions =
+    .label = Ausnahmen…
+    .accesskey = A
 permissions-notification-link = Weitere Informationen
 permissions-notification-pause =
     .label = Keine Benachrichtigungen bis nach Neustart von { -brand-short-name }
@@ -725,19 +739,22 @@ permissions-addon-exceptions =
     .label = Ausnahmen…
     .accesskey = A
 permissions-a11y-privacy-checkbox =
-    .label = Externen Anwendungen den Zugriff auf den Dienst für Barrierefreiheit in Firefox verweigern
+    .label = Externen Anwendungen den Zugriff auf den Dienst für Barrierefreiheit in { -brand-short-name } verweigern
     .accesskey = B
 permissions-a11y-privacy-link = Weitere Informationen
 
 ## Privacy Section - Data Collection
 
 collection-header = Datenerhebung durch { -brand-short-name } und deren Verwendung
-collection-description = Wir lassen Ihnen die Wahl, ob Sie uns Daten senden, und sammeln nur die Daten, welche erforderlich sind, um { -brand-short-name } für jeden anbieten und verbessern zu können. Wir fragen immer um Ihre Erlaubnis, bevor wir persönliche Daten senden.
+collection-description = Wir lassen dir die Wahl, ob du uns Daten sendest, und sammeln nur die Daten, welche erforderlich sind, um { -brand-short-name } für jeden anbieten und verbessern zu können. Wir fragen immer um deine Erlaubnis, bevor wir persönliche Daten senden.
 collection-privacy-notice = Datenschutzhinweis
 collection-health-report =
     .label = { -brand-short-name } erlauben, Daten zu technischen Details und Interaktionen an { -vendor-short-name } zu senden
     .accesskey = t
 collection-health-report-link = Weitere Informationen
+collection-studies =
+    .label = { -brand-short-name } das Installieren und Durchführen von Studien erlauben
+collection-studies-link = { -brand-short-name }-Studien ansehen
 # This message is displayed above disabled data sharing options in developer builds
 # or builds with no Telemetry support available.
 collection-health-report-disabled = Datenübermittlung ist für diese Build-Konfiguration deaktiviert

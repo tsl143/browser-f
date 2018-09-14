@@ -36,6 +36,7 @@ stage("Copy XPI") {
     UPLOAD_PATH="s3://repository.cliqz.com/ghostery/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/$CQZ_BUILD_ID/cliqz@cliqz.com.xpi"
     HTTPSE_UPLOAD_PATH="s3://repository.cliqz.com/ghostery/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/$CQZ_BUILD_ID/https-everywhere@cliqz.com.xpi"
     GHOSTERY_UPLOAD_PATH="s3://repository.cliqz.com/ghostery/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/$CQZ_BUILD_ID/firefox@ghostery.com.xpi"
+    CONSENTRICK_UPLOAD_PATH="s3://repository.cliqz.com/ghostery/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/$CQZ_BUILD_ID/gdprtool@cliqz.com.xpi"
     LAST_BUILDID_PATH="s3://repository.cliqz.com/ghostery/$CQZ_RELEASE_CHANNEL/$CQZ_VERSION/lastbuildid"
 
     withCredentials([[
@@ -47,6 +48,7 @@ stage("Copy XPI") {
         sh "aws s3 cp $CQZ_EXTENSION_URL $UPLOAD_PATH"
         sh "aws s3 cp $HTTPSE_EXTENSION_URL $HTTPSE_UPLOAD_PATH"
         sh "aws s3 cp $GHOSTERY_EXTENSION_URL $GHOSTERY_UPLOAD_PATH"
+        sh "aws s3 cp $CONSENTRICK_EXTENSION_URL $CONSENTRICK_UPLOAD_PATH"
         sh "rm -f lastbuildid && echo $CQZ_BUILD_ID > lastbuildid && aws s3 cp lastbuildid $LAST_BUILDID_PATH"
     }
 }
@@ -205,7 +207,7 @@ stage('Build') {
 
 def uploadBeta(build_id, cqz_version) {
   def locales = ["en-US", "de"]
-  def installers_suffixes = ["win32.installer.exe", "mac.dmg"]
+  def installers_suffixes = ["win32.installer.exe", "win64.installer.exe", "mac.dmg"]
 
   for (locale in locales) {
       for (inst_suff in installers_suffixes) {

@@ -89,7 +89,7 @@ IF "%CQZ_BUILD_64BIT_WINDOWS%"=="1" (
 :: BUILD
 :::::::::::::::::::::::::::::::::::
 ECHO [%TIME%] INFO: Starting build
-ECHO cd $CQZ_WORKSPACE ^^^&^^^& ./magic_build_and_package.sh --clobber | call %BUILD_SHELL%
+ECHO cd $CQZ_WORKSPACE ^^^&^^^& ./magic_build_and_package.sh | call %BUILD_SHELL%
 
 IF ERRORLEVEL 1 (
   ECHO [%TIME%] ERROR: Build failed! Exiting.

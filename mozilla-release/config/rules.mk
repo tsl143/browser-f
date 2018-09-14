@@ -575,22 +575,22 @@ ifdef MOZ_POST_PROGRAM_COMMAND
 	$(MOZ_POST_PROGRAM_COMMAND) $@
 endif
 
-$(HOST_PROGRAM): $(HOST_PROGOBJS) $(HOST_LIBS) $(HOST_EXTRA_DEPS) $(GLOBAL_DEPS)
+$(HOST_PROGRAM): $(HOST_PROGOBJS) $(HOST_LIBS) $(HOST_EXTRA_DEPS) $(GLOBAL_DEPS) $(call mkdir_deps,$(DEPTH)/dist/host/bin)
 	$(REPORT_BUILD)
 ifeq (_WINNT,$(GNU_CC)_$(HOST_OS_ARCH))
 	$(LINKER) -NOLOGO -OUT:$@ -PDB:$(HOST_PDBFILE) $(HOST_OBJS) $(WIN32_EXE_LDFLAGS) $(HOST_LDFLAGS) $(HOST_LIBS) $(HOST_EXTRA_LIBS)
 ifdef MSMANIFEST_TOOL
 	@if test -f $@.manifest; then \
-		if test -f '$(srcdir)/$@.manifest'; then \
-			echo 'Embedding manifest from $(srcdir)/$@.manifest and $@.manifest'; \
-			$(MT) -NOLOGO -MANIFEST '$(win_srcdir)/$@.manifest' $@.manifest -OUTPUTRESOURCE:$@\;1; \
+		if test -f '$(srcdir)/$(notdir $@).manifest'; then \
+			echo 'Embedding manifest from $(srcdir)/$(notdir $@).manifest and $@.manifest'; \
+			$(MT) -NOLOGO -MANIFEST '$(win_srcdir)/$(notdir $@).manifest' $@.manifest -OUTPUTRESOURCE:$@\;1; \
 		else \
 			echo 'Embedding manifest from $@.manifest'; \
 			$(MT) -NOLOGO -MANIFEST $@.manifest -OUTPUTRESOURCE:$@\;1; \
 		fi; \
-	elif test -f '$(srcdir)/$@.manifest'; then \
-		echo 'Embedding manifest from $(srcdir)/$@.manifest'; \
-		$(MT) -NOLOGO -MANIFEST '$(win_srcdir)/$@.manifest' -OUTPUTRESOURCE:$@\;1; \
+	elif test -f '$(srcdir)/$(notdir $@).manifest'; then \
+		echo 'Embedding manifest from $(srcdir)/$(notdir $@).manifest'; \
+		$(MT) -NOLOGO -MANIFEST '$(win_srcdir)/$(notdir $@).manifest' -OUTPUTRESOURCE:$@\;1; \
 	fi
 endif	# MSVC with manifest tool
 else
@@ -780,7 +780,7 @@ define syms_template
 syms:: $(2)
 $(2): $(1)
 ifdef MOZ_CRASHREPORTER
-	$$(call py_action,dumpsymbols,$$(abspath $$<) $$(abspath $$@))
+	$$(call py_action,dumpsymbols,$$(abspath $$<) $$(abspath $$@) $$(DUMP_SYMBOLS_FLAGS))
 endif
 endef
 
@@ -925,8 +925,9 @@ ifndef MOZ_TSAN
 # Cargo needs the same linker flags as the C/C++ compiler,
 # but not the final libraries. Filter those out because they
 # cause problems on macOS 10.7; see bug 1365993 for details.
+# Also, we don't want to pass PGO flags until cargo supports them.
 target_cargo_env_vars := \
-	MOZ_CARGO_WRAP_LDFLAGS="$(filter-out -framework Cocoa -lobjc AudioToolbox ExceptionHandling,$(LDFLAGS))" \
+	MOZ_CARGO_WRAP_LDFLAGS="$(filter-out -framework Cocoa -lobjc AudioToolbox ExceptionHandling -fprofile-%,$(LDFLAGS))" \
 	MOZ_CARGO_WRAP_LD="$(CC)" \
 	$(cargo_linker_env_var)=$(topsrcdir)/build/cargo-linker
 endif # MOZ_TSAN
@@ -1179,13 +1180,6 @@ normalizepath = $(1)
 endif
 
 ###############################################################################
-# Java rules
-###############################################################################
-ifneq (,$(JAVA_JAR_TARGETS))
-  include $(MOZILLA_DIR)/config/makefiles/java-build.mk
-endif
-
-###############################################################################
 # Bunch of things that extend the 'export' rule (in order):
 ###############################################################################
 
@@ -1215,6 +1209,12 @@ endif
 CLIQZ_EXT_URL = "http://repository.cliqz.com/ghostery/$(CQZ_RELEASE_CHANNEL)/$(CQZ_VERSION)/$(MOZ_BUILD_DATE)/cliqz@cliqz.com.xpi"
 HTTPSE_EXT_URL = "http://repository.cliqz.com/ghostery/$(CQZ_RELEASE_CHANNEL)/$(CQZ_VERSION)/$(MOZ_BUILD_DATE)/https-everywhere@cliqz.com.xpi"
 GHOSTERY_EXT_URL = "http://repository.cliqz.com/ghostery/$(CQZ_RELEASE_CHANNEL)/$(CQZ_VERSION)/$(MOZ_BUILD_DATE)/firefox@ghostery.com.xpi"
+CONSENTRICK_EXT_URL = "http://repository.cliqz.com/dist/$(CQZ_RELEASE_CHANNEL)/$(CQZ_VERSION)/$(MOZ_BUILD_DATE)/gdprtool@cliqz.com.xpi"
+TOR_WIN_URL = "https://cdn.cliqz.com/browser-f/fun-demo/tor_windows32_7.5.6.tar.xz"
+TOR_LINUX64_URL = "https://cdn.cliqz.com/browser-f/fun-demo/tor_linux64_7.5.6.tar.xz"
+TOR_LINUX32_URL = "https://cdn.cliqz.com/browser-f/fun-demo/tor_linux32_7.5.6.tar.xz"
+TOR_MAC_URL = "https://cdn.cliqz.com/browser-f/fun-demo/tor_mac64_7.5.6.tar.xz"
+CLIQZ_ONIONMODE_EXT_URL = "https://s3.amazonaws.com/cdncliqz/update/browser_pre/onionmode%40cliqz.com/onionmode%40cliqz.com-0.0.1-browser-signed.xpi"
 
 DIST_RESPATH = $(DIST)/bin
 EXTENSIONS_PATH = $(DIST_RESPATH)/browser/features
@@ -1240,14 +1240,49 @@ ifdef GHOSTERY_EXT_URL
 	wget --output-document $(GHOSTERY_XPI_PATH) $(GHOSTERY_EXT_URL)
 endif
 
+CONSENTRICK_XPI_PATH = $(EXTENSIONS_PATH)/gdprtool@cliqz.com.xpi
+$(CONSENTRICK_XPI_PATH): $(EXTENSIONS_PATH)
+ifdef CONSENTRICK_EXT_URL
+	echo CONSENTRICK_XPI_PATH in `pwd`
+	wget --output-document $(CONSENTRICK_XPI_PATH) $(CONSENTRICK_EXT_URL)
+endif
+
+CLIQZ_ONIONMODE_XPI_PATH = $(EXTENSIONS_PATH)/onionmode@cliqz.com.xpi
+$(CLIQZ_ONIONMODE_XPI_PATH): $(EXTENSIONS_PATH)
+ifeq ($(CQZ_TOR_MODE),1)
+	echo CLIQZ_ONIONMODE_XPI_PATH in `pwd`
+	wget --output-document $(CLIQZ_ONIONMODE_XPI_PATH) $(CLIQZ_ONIONMODE_EXT_URL)
+endif
+
 CLIQZ_CFG = $(DIST_RESPATH)/ghostery.cfg
 $(CLIQZ_CFG):
 	echo CLIQZ_CFG in `pwd`
 	echo $(CLIQZ_CFG)
 	cp -R $(topsrcdir)/../ghostery.cfg $(DIST_RESPATH)
 
+tor:
+ifeq ($(CQZ_TOR_MODE),1)
+ifeq ($(OS_TARGET),WINNT)
+	wget --output-document $(DIST_RESPATH)/tor.tar.xz $(TOR_WIN_URL)
+else
+ifeq ($(OS_TARGET),Linux)
+ifdef _AMD64_
+	wget --output-document $(DIST_RESPATH)/tor.tar.xz $(TOR_LINUX64_URL)
+endif
+ifndef _AMD64_
+	wget --output-document $(DIST_RESPATH)/tor.tar.xz $(TOR_LINUX32_URL)
+endif
+else
+ifeq ($(OS_TARGET),Darwin)
+	wget --output-document $(DIST_RESPATH)/tor.tar.xz $(TOR_MAC_URL)
+endif
+endif
+endif
+	tar -xf $(DIST_RESPATH)/tor.tar.xz --directory $(DIST_RESPATH)
+endif
+
 # Package Cliqz stuff
-cliqz_distr: $(CLIQZ_XPI_PATH) $(HTTPSE_XPI_PATH) $(GHOSTERY_XPI_PATH) $(CLIQZ_CFG)
+cliqz_distr: $(CLIQZ_XPI_PATH) $(HTTPSE_XPI_PATH) $(CONSENTRICK_XPI_PATH) $(CLIQZ_ONIONMODE_XPI_PATH) $(GHOSTERY_XPI_PATH) tor $(CLIQZ_CFG)
 	echo cliqz_distr in `pwd`
 
 chrome::
