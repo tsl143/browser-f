@@ -63,6 +63,7 @@
   </hbox>
 </groupbox>
 
+#if 0
 <groupbox id="additionsGroup" data-category="panePrivacy" hidden="false">
   <vbox flex="1" class="view-pane password-managers" tabindex="0">
     <caption><label>&passwordManager.title;</label></caption>
@@ -72,6 +73,7 @@
     <richlistbox id="password-managers-list" class="list" flex="1"></richlistbox>
   </vbox>
 </groupbox>
+#endif
 
 <!-- History -->
 <groupbox id="historyGroup" data-category="panePrivacy" hidden="true">

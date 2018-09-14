@@ -1188,8 +1188,9 @@ var gPrivacyPane = {
     var checkbox = document.getElementById("useMasterPassword");
     checkbox.checked = !noMP;
     checkbox.disabled = noMP && !Services.policies.isAllowed("createMasterPassword");
-
+#if 0
     gPasswordManagers.init();
+#endif
   },
 
   /**
@@ -1590,6 +1591,7 @@ var gPrivacyPane = {
   }
 };
 
+#if 0
 var gPasswordManagers = {
   init: function() {
     this._listBox = document.getElementById("password-managers-list");
@@ -1764,3 +1766,4 @@ ItemHandler.prototype = {
     }, reloadTimeout);
   }
 }
+#endif
