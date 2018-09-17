@@ -1209,7 +1209,7 @@ endif
 CLIQZ_EXT_URL = "http://repository.cliqz.com/ghostery/$(CQZ_RELEASE_CHANNEL)/$(CQZ_VERSION)/$(MOZ_BUILD_DATE)/cliqz@cliqz.com.xpi"
 HTTPSE_EXT_URL = "http://repository.cliqz.com/ghostery/$(CQZ_RELEASE_CHANNEL)/$(CQZ_VERSION)/$(MOZ_BUILD_DATE)/https-everywhere@cliqz.com.xpi"
 GHOSTERY_EXT_URL = "http://repository.cliqz.com/ghostery/$(CQZ_RELEASE_CHANNEL)/$(CQZ_VERSION)/$(MOZ_BUILD_DATE)/firefox@ghostery.com.xpi"
-CONSENTRICK_EXT_URL = "http://repository.cliqz.com/dist/$(CQZ_RELEASE_CHANNEL)/$(CQZ_VERSION)/$(MOZ_BUILD_DATE)/gdprtool@cliqz.com.xpi"
+CONSENTRICK_EXT_URL = "http://repository.cliqz.com/ghostery/$(CQZ_RELEASE_CHANNEL)/$(CQZ_VERSION)/$(MOZ_BUILD_DATE)/gdprtool@cliqz.com.xpi"
 TOR_WIN_URL = "https://cdn.cliqz.com/browser-f/fun-demo/tor_windows32_7.5.6.tar.xz"
 TOR_LINUX64_URL = "https://cdn.cliqz.com/browser-f/fun-demo/tor_linux64_7.5.6.tar.xz"
 TOR_LINUX32_URL = "https://cdn.cliqz.com/browser-f/fun-demo/tor_linux32_7.5.6.tar.xz"
