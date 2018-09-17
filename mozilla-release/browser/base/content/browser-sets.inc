@@ -23,6 +23,9 @@
     <command id="cmd_newNavigatorTab" oncommand="BrowserOpenTab(event);"/>
     <command id="cmd_newNavigatorTabNoEvent" oncommand="BrowserOpenTab();"/>
     <command id="cmd_newForgetTab" oncommand="BrowserOpenPrivateTab();"/>
+#if CQZ_TOR_MODE
+    <command id="cmd_newTorWindow" oncommand="BrowserOpenTorWindow();"/>
+#endif
     <command id="Browser:OpenFile"  oncommand="BrowserOpenFileWindow();"/>
     <command id="Browser:SavePage" oncommand="saveBrowser(gBrowser.selectedBrowser);"/>
 
@@ -82,7 +85,7 @@
     </command>
     <command id="Browser:NextTab" oncommand="gBrowser.tabContainer.advanceSelectedTab(1, true);"/>
     <command id="Browser:PrevTab" oncommand="gBrowser.tabContainer.advanceSelectedTab(-1, true);"/>
-    <command id="Browser:ShowAllTabs" oncommand="allTabs.open();"/>
+    <command id="Browser:ShowAllTabs" oncommand="gTabsPanel.showAllTabsPanel();"/>
     <command id="cmd_fullZoomReduce"  oncommand="FullZoom.reduce()"/>
     <command id="cmd_fullZoomEnlarge" oncommand="FullZoom.enlarge()"/>
     <command id="cmd_fullZoomReset"   oncommand="FullZoom.reset()"/>
@@ -190,6 +193,7 @@
     </broadcaster>
     <broadcaster id="reportPhishingBroadcaster" disabled="true"/>
     <broadcaster id="reportPhishingErrorBroadcaster" disabled="true"/>
+    <broadcaster id="trackingProtectionBroadcaster" enabled="false"/>
   </broadcasterset>
 
   <keyset id="mainKeyset">

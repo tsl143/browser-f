@@ -56,6 +56,10 @@ label {
   margin-bottom: 0 !important;
 }
 
+description > b {
+  font-weight: bold;
+}
+
 .tip-caption {
   font-size: .9em;
 }
@@ -917,12 +921,12 @@ menulist[indicator=true] > menupopup menuitem[indicator=true]:not([image]) > .me
   line-height: 30px;
 }
 
-.no-results-container:nth-child(2) {
+.no-results-image-container {
   margin-top: 64px;
 }
 
 %if 0
-.no-results-container:nth-child(2) > image {
+.no-results-image {
   list-style-image: url("chrome://browser/skin/preferences/in-content/no-search-results.svg");
   width: 380px;
   height: 293px;
@@ -945,3 +949,5 @@ menulist[indicator=true] > menupopup menuitem[indicator=true]:not([image]) > .me
 .proxy-port-input {
   width: calc(5ch + 22px); /* 5 chars + 11px padding on both sides */
 }
+
+%include ./cliqz.home.inc.css

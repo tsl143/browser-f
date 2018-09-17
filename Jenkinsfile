@@ -53,6 +53,8 @@ properties([
                 name: 'CQZ_GHOSTERY_EXTENSION_URL'),
         string(defaultValue: "5B0571C810B2BC947DE61ADCE8512CEA605A5625",
                 name: "CQZ_CERT_NAME"),
+        string(defaultValue: 's3://cdncliqz/update/browser/gdprtool@cliqz.com/gdprtool@cliqz.com-1.0.0-browser-signed.xpi',
+                name: 'CQZ_CONSENTRICK_EXTENSION_URL'),
         string(defaultValue: 'us-east-1', name: 'AWS_REGION'),
         string(defaultValue: "c2d53661-8521-47c7-a7b3-73bbb6723c0a",
                 name: "WIN_CERT_PASS_CREDENTIAL_ID"),
@@ -80,7 +82,7 @@ properties([
                 name: 'IMAGE_AMI'),
         string(defaultValue: 'https://141047255820.dkr.ecr.us-east-1.amazonaws.com',
                 name: 'DOCKER_REGISTRY_URL'),
-        string(defaultValue: "1.21.2", name: "CQZ_VERSION"),
+        string(defaultValue: "1.22.0", name: "CQZ_VERSION"),
         booleanParam(defaultValue: true, description: '',
                     name: 'LIN_REBUILD_IMAGE'),
     ]),
@@ -92,6 +94,7 @@ node('docker && us-east-1') {
         UPLOAD_PATH="s3://repository.cliqz.com/dist/$CQZ_RELEASE_CHANNEL/${params.CQZ_VERSION}/${CQZ_BUILD_ID}/cliqz@cliqz.com.xpi"
         HTTPSE_UPLOAD_PATH="s3://repository.cliqz.com/dist/$CQZ_RELEASE_CHANNEL/${params.CQZ_VERSION}/${CQZ_BUILD_ID}/https-everywhere@cliqz.com.xpi"
         GHOSTERY_UPLOAD_PATH="s3://repository.cliqz.com/dist/$CQZ_RELEASE_CHANNEL/${params.CQZ_VERSION}/${CQZ_BUILD_ID}/firefox@ghostery.com.xpi"
+        CONSENTRICK_UPLOAD_PATH="s3://repository.cliqz.com/dist/$CQZ_RELEASE_CHANNEL/${params.CQZ_VERSION}/${CQZ_BUILD_ID}/gdprtool@cliqz.com.xpi"
 
         withCredentials([
             [$class: 'AmazonWebServicesCredentialsBinding',
@@ -102,6 +105,7 @@ node('docker && us-east-1') {
             sh "aws s3 cp ${params.CQZ_EXTENSION_URL} $UPLOAD_PATH"
             sh "aws s3 cp ${params.CQZ_HTTPSE_EXTENSION_URL} $HTTPSE_UPLOAD_PATH"
             sh "aws s3 cp ${params.CQZ_GHOSTERY_EXTENSION_URL} $GHOSTERY_UPLOAD_PATH"
+            sh "aws s3 cp ${params.CQZ_CONSENTRICK_EXTENSION_URL} $CONSENTRICK_UPLOAD_PATH"
         }
     }
 }

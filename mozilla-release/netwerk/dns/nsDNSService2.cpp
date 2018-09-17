@@ -56,6 +56,7 @@ static const char kPrefDnsForceResolve[]     = "network.dns.forceResolve";
 static const char kPrefDnsOfflineLocalhost[] = "network.dns.offline-localhost";
 static const char kPrefDnsNotifyResolution[] = "network.dns.notifyResolution";
 static const char kPrefNetworkProxyType[]    = "network.proxy.type";
+static const char kPrefSocksRemoteDns[]      = "network.proxy.socks_remote_dns";
 
 //-----------------------------------------------------------------------------
 
@@ -92,15 +93,18 @@ nsDNSRecord::GetCanonicalName(nsACString &result)
                    NS_ERROR_NOT_AVAILABLE);
 
     MutexAutoLock lock(mHostRecord->addr_info_lock);
-    if (mHostRecord->addr_info) {
-        const char* cname = mHostRecord->addr_info->mCanonicalName ?
-            mHostRecord->addr_info->mCanonicalName :
-            mHostRecord->addr_info->mHostName;
-        result.Assign(cname);
-    } else {
-        // if the record is for an IP address literal, then the canonical
-        // host name is the IP address literal.
+
+    // if the record is for an IP address literal, then the canonical
+    // host name is the IP address literal.
+    if (!mHostRecord->addr_info) {
         result = mHostRecord->host;
+        return NS_OK;
+    }
+
+    if (mHostRecord->addr_info->mCanonicalName.IsEmpty()) {
+        result = mHostRecord->addr_info->mHostName;
+    } else {
+        result = mHostRecord->addr_info->mCanonicalName;
     }
     return NS_OK;
 }
@@ -317,15 +321,14 @@ public:
                       const OriginAttributes &attrs,
                       nsIDNSListener   *listener,
                       uint16_t          flags,
-                      uint16_t          af,
-                      const nsACString &netInterface)
+                      uint16_t          af)
         : mResolver(res)
         , mHost(host)
         , mOriginAttributes(attrs)
         , mListener(listener)
         , mFlags(flags)
         , mAF(af)
-        , mNetworkInterface(netInterface) {}
+    { }
 
     void OnResolveHostComplete(nsHostResolver *, nsHostRecord *, nsresult) override;
     // Returns TRUE if the DNS listener arg is the same as the member listener
@@ -341,7 +344,6 @@ public:
     nsCOMPtr<nsIDNSListener> mListener;
     uint16_t                 mFlags;
     uint16_t                 mAF;
-    nsCString                mNetworkInterface;
 private:
     virtual ~nsDNSAsyncRequest() = default;
 };
@@ -395,8 +397,8 @@ NS_IMETHODIMP
 nsDNSAsyncRequest::Cancel(nsresult reason)
 {
     NS_ENSURE_ARG(NS_FAILED(reason));
-    mResolver->DetachCallback(mHost.get(), mOriginAttributes, mFlags, mAF,
-                              mNetworkInterface.get(), this, reason);
+    mResolver->DetachCallback(mHost, mOriginAttributes, mFlags, mAF,
+                              this, reason);
     return NS_OK;
 }
 
@@ -495,10 +497,16 @@ nsDNSService::nsDNSService()
     : mLock("nsDNSServer.mLock")
     , mDisableIPv6(false)
     , mDisablePrefetch(false)
+    , mBlockDotOnion(false)
     , mNotifyResolution(false)
     , mOfflineLocalhost(false)
     , mForceResolveOn(false)
+    , mProxyType(0)
     , mTrrService(nullptr)
+    , mResCacheEntries(0)
+    , mResCacheExpiration(0)
+    , mResCacheGrace(0)
+    , mResolverPrefsUpdated(false)
 {
 }
 
@@ -630,6 +638,14 @@ nsDNSService::ReadPrefs(const char *name)
         // Disable prefetching either by explicit preference or if a
         // manual proxy is configured
         mDisablePrefetch = true;
+
+        // Disable DNS service if manual proxy is configured and SOCKS
+        // remote DNS preference is set.
+        if (NS_SUCCEEDED(Preferences::GetBool(kPrefSocksRemoteDns, &tmpbool))) {
+            mDisableDNS = tmpbool;
+        }
+    } else {
+        mDisableDNS = false;
     }
     return NS_OK;
 }
@@ -679,6 +695,7 @@ nsDNSService::Init()
         // Monitor these to see if there is a change in proxy configuration
         // If a manual proxy is in use, disable prefetch implicitly
         prefs->AddObserver("network.proxy.type", this, false);
+        prefs->AddObserver(kPrefSocksRemoteDns, this, false);
     }
 
     nsDNSPrefetch::Initialize(this);
@@ -810,57 +827,17 @@ nsDNSService::AsyncResolve(const nsACString  &aHostname,
         }
     }
 
-    return AsyncResolveExtendedNative(aHostname, flags, EmptyCString(),
-                                      listener, target_, attrs,
-                                      result);
+    return AsyncResolveNative(aHostname, flags, listener,
+                              target_, attrs, result);
 }
 
 NS_IMETHODIMP
 nsDNSService::AsyncResolveNative(const nsACString        &aHostname,
                                  uint32_t                 flags,
-                                 nsIDNSListener          *listener,
+                                 nsIDNSListener          *aListener,
                                  nsIEventTarget          *target_,
                                  const OriginAttributes  &aOriginAttributes,
                                  nsICancelable          **result)
-{
-    return AsyncResolveExtendedNative(aHostname, flags, EmptyCString(),
-                                      listener, target_, aOriginAttributes,
-                                      result);
-}
-
-NS_IMETHODIMP
-nsDNSService::AsyncResolveExtended(const nsACString  &aHostname,
-                                   uint32_t           flags,
-                                   const nsACString  &aNetworkInterface,
-                                   nsIDNSListener    *listener,
-                                   nsIEventTarget    *target_,
-                                   JS::HandleValue    aOriginAttributes,
-                                   JSContext         *aCx,
-                                   uint8_t           aArgc,
-                                   nsICancelable    **result)
-{
-    OriginAttributes attrs;
-
-    if (aArgc == 1) {
-        if (!aOriginAttributes.isObject() ||
-            !attrs.Init(aCx, aOriginAttributes)) {
-            return NS_ERROR_INVALID_ARG;
-        }
-    }
-
-    return AsyncResolveExtendedNative(aHostname, flags, aNetworkInterface,
-                                      listener, target_, attrs,
-                                      result);
-}
-
-NS_IMETHODIMP
-nsDNSService::AsyncResolveExtendedNative(const nsACString        &aHostname,
-                                         uint32_t                 flags,
-                                         const nsACString        &aNetworkInterface,
-                                         nsIDNSListener          *aListener,
-                                         nsIEventTarget          *target_,
-                                         const OriginAttributes  &aOriginAttributes,
-                                         nsICancelable          **result)
 {
     // grab reference to global host resolver and IDN service.  beware
     // simultaneous shutdown!!
@@ -882,6 +859,14 @@ nsDNSService::AsyncResolveExtendedNative(const nsACString        &aHostname,
 
     if (mNotifyResolution) {
         NS_DispatchToMainThread(new NotifyDNSResolution(aHostname));
+    }
+
+    PRNetAddr tempAddr;
+    if (mDisableDNS) {
+        // Allow IP lookups through, but nothing else.
+        if (PR_StringToNetAddr(aHostname.BeginReading(), &tempAddr) != PR_SUCCESS) {
+            return NS_ERROR_UNKNOWN_PROXY_HOST; // XXX: NS_ERROR_NOT_IMPLEMENTED?
+        }
     }
 
     if (!res)
@@ -912,13 +897,11 @@ nsDNSService::AsyncResolveExtendedNative(const nsACString        &aHostname,
 
     MOZ_ASSERT(listener);
     RefPtr<nsDNSAsyncRequest> req =
-        new nsDNSAsyncRequest(res, hostname, aOriginAttributes, listener, flags, af,
-                              aNetworkInterface);
+        new nsDNSAsyncRequest(res, hostname, aOriginAttributes, listener, flags, af);
     if (!req)
         return NS_ERROR_OUT_OF_MEMORY;
 
-    rv = res->ResolveHost(req->mHost.get(), req->mOriginAttributes, flags, af,
-                          req->mNetworkInterface.get(), req);
+    rv = res->ResolveHost(req->mHost, req->mOriginAttributes, flags, af, req);
     req.forget(result);
     return rv;
 }
@@ -941,8 +924,8 @@ nsDNSService::CancelAsyncResolve(const nsACString &aHostname,
         }
     }
 
-    return CancelAsyncResolveExtendedNative(aHostname, aFlags, EmptyCString(),
-                                            aListener, aReason, attrs);
+    return CancelAsyncResolveNative(aHostname, aFlags,
+                                    aListener, aReason, attrs);
 }
 
 NS_IMETHODIMP
@@ -951,41 +934,6 @@ nsDNSService::CancelAsyncResolveNative(const nsACString       &aHostname,
                                        nsIDNSListener         *aListener,
                                        nsresult                aReason,
                                        const OriginAttributes &aOriginAttributes)
-{
-    return CancelAsyncResolveExtendedNative(aHostname, aFlags, EmptyCString(),
-                                            aListener, aReason, aOriginAttributes);
-}
-
-NS_IMETHODIMP
-nsDNSService::CancelAsyncResolveExtended(const nsACString &aHostname,
-                                         uint32_t          aFlags,
-                                         const nsACString &aNetworkInterface,
-                                         nsIDNSListener   *aListener,
-                                         nsresult          aReason,
-                                         JS::HandleValue   aOriginAttributes,
-                                         JSContext        *aCx,
-                                         uint8_t           aArgc)
-{
-    OriginAttributes attrs;
-
-    if (aArgc == 1) {
-        if (!aOriginAttributes.isObject() ||
-            !attrs.Init(aCx, aOriginAttributes)) {
-            return NS_ERROR_INVALID_ARG;
-        }
-    }
-
-    return CancelAsyncResolveExtendedNative(aHostname, aFlags, aNetworkInterface,
-                                            aListener, aReason, attrs);
-}
-
-NS_IMETHODIMP
-nsDNSService::CancelAsyncResolveExtendedNative(const nsACString       &aHostname,
-                                               uint32_t                aFlags,
-                                               const nsACString       &aNetworkInterface,
-                                               nsIDNSListener         *aListener,
-                                               nsresult                aReason,
-                                               const OriginAttributes &aOriginAttributes)
 {
     // grab reference to global host resolver and IDN service.  beware
     // simultaneous shutdown!!
@@ -1013,9 +961,8 @@ nsDNSService::CancelAsyncResolveExtendedNative(const nsACString       &aHostname
 
     uint16_t af = GetAFForLookup(hostname, aFlags);
 
-    res->CancelAsyncRequest(hostname.get(), aOriginAttributes, aFlags, af,
-                            nsPromiseFlatCString(aNetworkInterface).get(), aListener,
-                            aReason);
+    res->CancelAsyncRequest(hostname, aOriginAttributes, aFlags, af,
+                            aListener, aReason);
     return NS_OK;
 }
 
@@ -1097,6 +1044,14 @@ nsDNSService::ResolveInternal(const nsACString        &aHostname,
         flags |= RESOLVE_OFFLINE;
     }
 
+    PRNetAddr tempAddr;
+    if (mDisableDNS) {
+        // Allow IP lookups through, but nothing else.
+        if (PR_StringToNetAddr(aHostname.BeginReading(), &tempAddr) != PR_SUCCESS) {
+            return NS_ERROR_UNKNOWN_PROXY_HOST; // XXX: NS_ERROR_NOT_IMPLEMENTED?
+        }
+    }
+
     //
     // sync resolve: since the host resolver only works asynchronously, we need
     // to use a mutex and a condvar to wait for the result.  however, since the
@@ -1114,7 +1069,7 @@ nsDNSService::ResolveInternal(const nsACString        &aHostname,
 
     uint16_t af = GetAFForLookup(hostname, flags);
 
-    rv = res->ResolveHost(hostname.get(), aOriginAttributes, flags, af, "", syncReq);
+    rv = res->ResolveHost(hostname, aOriginAttributes, flags, af, syncReq);
     if (NS_SUCCEEDED(rv)) {
         // wait for result
         while (!syncReq->mDone) {

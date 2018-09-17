@@ -45,6 +45,7 @@ fi
 
 if [ $IS_WIN ]; then
   MAKE=mozmake
+  export USE_STUB_INSTALLER=1
 else
   MAKE=make
 fi
@@ -106,5 +107,8 @@ wget -O adult-domains.bin https://s3.amazonaws.com/cdn.cliqz.com/browser-f/APT/a
 export CQZ_AUTO_PRIVATE_TAB=1
 export CQZ_ADULT_DOMAINS_BF=../adult-domains.bin
 # automatic forget tab - end
+
+# If you want to build browser with Tor mode support - uncomment next line
+#export CQZ_TOR_MODE=1
 
 ROOT_PATH=$PWD

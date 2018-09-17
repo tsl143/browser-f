@@ -247,6 +247,7 @@ const DEFAULT_ENVIRONMENT_PREFS = new Map([
   ["layers.prefer-d3d9", {what: RECORD_PREF_VALUE}],
   ["layers.prefer-opengl", {what: RECORD_PREF_VALUE}],
   ["layout.css.devPixelsPerPx", {what: RECORD_PREF_VALUE}],
+  ["lightweightThemes.selectedThemeID", {what: RECORD_PREF_VALUE}],
   ["marionette.enabled", {what: RECORD_PREF_VALUE}],
   ["network.cookie.cookieBehavior", {what: RECORD_PREF_VALUE}],
   ["network.proxy.autoconfig_url", {what: RECORD_PREF_STATE}],
@@ -565,6 +566,9 @@ EnvironmentAddonBuilder.prototype = {
     this._onAddonChange();
   },
   onUninstalling() {
+    this._onAddonChange();
+  },
+  onUninstalled() {
     this._onAddonChange();
   },
 
@@ -1353,14 +1357,6 @@ EnvironmentCache.prototype = {
       xpcomAbi: Services.appinfo.XPCOMABI,
       updaterAvailable: AppConstants.MOZ_UPDATER,
     };
-
-    // Add |architecturesInBinary| only for Mac Universal builds.
-    if ("@mozilla.org/xpcom/mac-utils;1" in Cc) {
-      let macUtils = Cc["@mozilla.org/xpcom/mac-utils;1"].getService(Ci.nsIMacUtils);
-      if (macUtils && macUtils.isUniversalBinary) {
-        buildData.architecturesInBinary = macUtils.architecturesInBinary;
-      }
-    }
 
     return buildData;
   },

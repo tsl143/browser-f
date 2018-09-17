@@ -79,7 +79,7 @@ class AddonsPanel extends Component {
   }
 
   updateDebugStatus() {
-    let debugDisabled =
+    const debugDisabled =
       !Services.prefs.getBoolPref(CHROME_ENABLED_PREF) ||
       !Services.prefs.getBoolPref(REMOTE_ENABLED_PREF);
 
@@ -94,10 +94,10 @@ class AddonsPanel extends Component {
     const filteredExtensions = [];
     this.props.client.listAddons()
       .then(({addons}) => {
-        let extensions = addons.filter(addon => addon.debuggable).map(addon => {
+        const extensions = addons.filter(addon => addon.debuggable).map(addon => {
           AddonsDetails.add(AddonManager.getAddonByID(addon.id))
           return {
-            addonActor: addon.actor,
+            addonTargetActor: addon.actor,
             addonID: addon.id,
             // Forward the whole addon actor form for potential remote debugging.
             form: addon,
@@ -156,11 +156,11 @@ class AddonsPanel extends Component {
   }
 
   render() {
-    let { client, connect, id } = this.props;
-    let { debugDisabled, extensions: targets } = this.state;
-    let installedName = Strings.GetStringFromName("extensions");
-    let temporaryName = Strings.GetStringFromName("temporaryExtensions");
-    let targetClass = AddonTarget;
+    const { client, connect, id } = this.props;
+    const { debugDisabled, extensions: targets } = this.state;
+    const installedName = Strings.GetStringFromName("extensions");
+    const temporaryName = Strings.GetStringFromName("temporaryExtensions");
+    const targetClass = AddonTarget;
 
     const installedTargets = targets.filter((target) => !target.temporarilyInstalled);
     const temporaryTargets = targets.filter((target) => target.temporarilyInstalled);

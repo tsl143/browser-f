@@ -6,6 +6,7 @@
 /* import-globals-from subdialogs.js */
 /* import-globals-from main.js */
 /* import-globals-from home.js */
+/* import-globals-from cliqz.home.js */
 /* import-globals-from search.js */
 /* import-globals-from containers.js */
 /* import-globals-from privacy.js */
@@ -59,6 +60,7 @@ function init_all() {
   register_module("paneSearch", gSearchPane);
   register_module("panePrivacy", gPrivacyPane);
   register_module("paneContainers", gContainersPane);
+  register_module("paneHome", gHomePane);
 #if MOZ_SERVICES_SYNC
   if (Services.prefs.getBoolPref("identity.fxaccounts.enabled")) {
     document.getElementById("category-sync").hidden = false;
@@ -243,12 +245,15 @@ async function spotlight(subcategory) {
     }
   }
   if (subcategory) {
+    await gPrivacyPane.privacyPanesInitialized;
+#if 0
     if (!gSearchResultsPane.categoriesInitialized) {
       await waitForSystemAddonInjectionsFinished([{
         isGoingToInject: formAutofillParent.initialized,
         elementId: "formAutofillGroup",
       }]);
     }
+#endif
     scrollAndHighlight(subcategory);
   }
 
@@ -361,12 +366,12 @@ async function confirmRestartPrompt(aRestartToEnable, aDefaultButtonIndex,
   let [
     msg, title, restartButtonText, noRestartButtonText, restartLaterButtonText
   ] = await document.l10n.formatValues([
-    [aRestartToEnable ?
-      "feature-enable-requires-restart" : "feature-disable-requires-restart"],
-    ["should-restart-title"],
-    ["should-restart-ok"],
-    ["cancel-no-restart-button"],
-    ["restart-later"],
+    {id: aRestartToEnable ?
+      "feature-enable-requires-restart" : "feature-disable-requires-restart"},
+    {id: "should-restart-title"},
+    {id: "should-restart-ok"},
+    {id: "cancel-no-restart-button"},
+    {id: "restart-later"},
   ]);
 
   // Set up the first (index 0) button:
