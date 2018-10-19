@@ -28,7 +28,12 @@ CUSTOM_NSIS_PLUGINS = \
 	ApplicationID.dll \
 	CertCheck.dll \
 	CityHash.dll \
+<<<<<<< HEAD
 	CliqzHelper.dll \
+||||||| merged common ancestors
+=======
+	ExecInExplorer.dll \
+>>>>>>> 6a13909b6641dc8a11d62f292336cd3a0a1d0579
 	InetBgDL.dll \
 	InvokeShellVerb.dll \
 	liteFirewallW.dll \
