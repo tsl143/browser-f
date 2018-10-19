@@ -19,7 +19,9 @@ for (let script of [
 
   "chrome://browser/content/browser-captivePortal.js",
   "chrome://browser/content/browser-compacttheme.js",
+#if 0
   "chrome://browser/content/browser-contentblocking.js",
+#endif
   "chrome://browser/content/browser-feeds.js",
   "chrome://browser/content/browser-media.js",
   "chrome://browser/content/browser-pageActions.js",
@@ -28,14 +30,6 @@ for (let script of [
   "chrome://browser/content/browser-sidebar.js",
   "chrome://browser/content/browser-siteIdentity.js",
   "chrome://browser/content/browser-tabsintitlebar.js",
-<<<<<<< HEAD
-#if 0
-  "chrome://browser/content/browser-trackingprotection.js",
-#endif
-||||||| merged common ancestors
-  "chrome://browser/content/browser-trackingprotection.js",
-=======
->>>>>>> 6a13909b6641dc8a11d62f292336cd3a0a1d0579
 
   "chrome://global/content/globalOverlay.js",
   "chrome://browser/content/utilityOverlay.js",

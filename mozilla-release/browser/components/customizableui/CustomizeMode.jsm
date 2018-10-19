@@ -1660,27 +1660,13 @@ CustomizeMode.prototype = {
     Services.prefs.setBoolPref(kExtraDragSpacePref, aShouldShowDragSpace);
   },
 
-<<<<<<< HEAD
   toggleBlueTheme(aShouldShowBlueTheme) {
     Services.prefs.setBoolPref(kCliqzBlueThemePref, aShouldShowBlueTheme);
     this._updateBlueThemeCheckbox();
   },
 
-  get _dwu() {
-    if (!this.__dwu) {
-      this.__dwu = this.window.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
-    }
-    return this.__dwu;
-||||||| merged common ancestors
-  get _dwu() {
-    if (!this.__dwu) {
-      this.__dwu = this.window.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
-    }
-    return this.__dwu;
-=======
   _getBoundsWithoutFlushing(element) {
     return this.window.windowUtils.getBoundsWithoutFlushing(element);
->>>>>>> 6a13909b6641dc8a11d62f292336cd3a0a1d0579
   },
 
   get _dir() {

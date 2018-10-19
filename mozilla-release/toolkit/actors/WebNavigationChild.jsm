@@ -43,7 +43,8 @@ class WebNavigationChild extends ActorChild {
         this.loadURI(message.data.uri, message.data.flags,
                      message.data.referrer, message.data.referrerPolicy,
                      message.data.postData, message.data.headers,
-                     message.data.baseURI, message.data.triggeringPrincipal);
+                     message.data.baseURI, message.data.triggeringPrincipal,
+                     message.data.ensurePrivate);
         break;
       case "WebNavigation:SetOriginAttributes":
         this.setOriginAttributes(message.data.originAttributes);

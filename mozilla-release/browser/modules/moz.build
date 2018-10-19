@@ -131,16 +131,6 @@ EXTRA_JS_MODULES += [
     'HomePage.jsm',
     'LaterRun.jsm',
     'OpenInTabsUtils.jsm',
-<<<<<<< HEAD
-    'PageInfoListener.jsm',
-    'PageStyleHandler.jsm',
-||||||| merged common ancestors
-    'PageActions.jsm',
-    'PageInfoListener.jsm',
-    'PageStyleHandler.jsm',
-=======
-    'PageActions.jsm',
->>>>>>> 6a13909b6641dc8a11d62f292336cd3a0a1d0579
     'PermissionUI.jsm',
     'PingCentre.jsm',
     'ProcessHangMonitor.jsm',

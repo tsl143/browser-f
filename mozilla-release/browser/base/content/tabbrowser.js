@@ -1411,14 +1411,8 @@ window._gBrowser = {
       openerBrowser: aOpenerBrowser,
       nextTabParentId: aNextTabParentId,
       focusUrlBar: aFocusUrlBar,
-<<<<<<< HEAD
       name: aName,
       private: aPrivate
-||||||| merged common ancestors
-      name: aName
-=======
-      name: aName,
->>>>>>> 6a13909b6641dc8a11d62f292336cd3a0a1d0579
     });
     if (!bgLoad)
       this.selectedTab = tab;
@@ -1832,26 +1826,16 @@ window._gBrowser = {
       b.setAttribute("remote", "true");
     }
 
-<<<<<<< HEAD
     if (aParams.private) {
       b.setAttribute("mozprivatebrowsing", 1);
     }
 
-    if (aParams.remoteType) {
-      b.setAttribute("remoteType", aParams.remoteType);
-      b.setAttribute("remote", "true");
-||||||| merged common ancestors
-    if (aParams.remoteType) {
-      b.setAttribute("remoteType", aParams.remoteType);
-      b.setAttribute("remote", "true");
-=======
     if (recordExecution) {
       b.setAttribute("recordExecution", recordExecution);
     }
 
     if (replayExecution) {
       b.setAttribute("replayExecution", replayExecution);
->>>>>>> 6a13909b6641dc8a11d62f292336cd3a0a1d0579
     }
 
     if (openerWindow) {
@@ -2197,129 +2181,6 @@ window._gBrowser = {
     return this.addTab(aURI, params);
   },
 
-<<<<<<< HEAD
-    var aTriggeringPrincipal;
-    var aReferrerPolicy;
-    var aFromExternal;
-    var aRelatedToCurrent;
-    var aSkipAnimation;
-    var aAllowMixedContent;
-    var aForceNotRemote;
-    var aPreferredRemoteType;
-    var aNoReferrer;
-    var aUserContextId;
-    var aEventDetail;
-    var aSameProcessAsFrameLoader;
-    var aOriginPrincipal;
-    var aDisallowInheritPrincipal;
-    var aOpener;
-    var aOpenerBrowser;
-    var aCreateLazyBrowser;
-    var aSkipBackgroundNotify;
-    var aNextTabParentId;
-    var aNoInitialLabel;
-    var aFocusUrlBar;
-    var aName;
-    var aBulkOrderedOpen;
-    var aIndex;
-    var aPinned;
-    var aPrivate;
-    if (arguments.length == 2 &&
-        typeof arguments[1] == "object" &&
-        !(arguments[1] instanceof Ci.nsIURI)) {
-      let params = arguments[1];
-      aTriggeringPrincipal = params.triggeringPrincipal;
-      aReferrerURI = params.referrerURI;
-      aReferrerPolicy = params.referrerPolicy;
-      aCharset = params.charset;
-      aPostData = params.postData;
-      aOwner = params.ownerTab;
-      aAllowThirdPartyFixup = params.allowThirdPartyFixup;
-      aFromExternal = params.fromExternal;
-      aRelatedToCurrent = params.relatedToCurrent;
-      aSkipAnimation = params.skipAnimation;
-      aAllowMixedContent = params.allowMixedContent;
-      aForceNotRemote = params.forceNotRemote;
-      aPreferredRemoteType = params.preferredRemoteType;
-      aNoReferrer = params.noReferrer;
-      aUserContextId = params.userContextId;
-      aEventDetail = params.eventDetail;
-      aSameProcessAsFrameLoader = params.sameProcessAsFrameLoader;
-      aOriginPrincipal = params.originPrincipal;
-      aDisallowInheritPrincipal = params.disallowInheritPrincipal;
-      aOpener = params.opener;
-      aOpenerBrowser = params.openerBrowser;
-      aCreateLazyBrowser = params.createLazyBrowser;
-      aSkipBackgroundNotify = params.skipBackgroundNotify;
-      aNextTabParentId = params.nextTabParentId;
-      aNoInitialLabel = params.noInitialLabel;
-      aFocusUrlBar = params.focusUrlBar;
-      aName = params.name;
-      aBulkOrderedOpen = params.bulkOrderedOpen;
-      aIndex = params.index;
-      aPinned = params.pinned;
-      aPrivate = params.private;
-||||||| merged common ancestors
-    var aTriggeringPrincipal;
-    var aReferrerPolicy;
-    var aFromExternal;
-    var aRelatedToCurrent;
-    var aSkipAnimation;
-    var aAllowMixedContent;
-    var aForceNotRemote;
-    var aPreferredRemoteType;
-    var aNoReferrer;
-    var aUserContextId;
-    var aEventDetail;
-    var aSameProcessAsFrameLoader;
-    var aOriginPrincipal;
-    var aDisallowInheritPrincipal;
-    var aOpener;
-    var aOpenerBrowser;
-    var aCreateLazyBrowser;
-    var aSkipBackgroundNotify;
-    var aNextTabParentId;
-    var aNoInitialLabel;
-    var aFocusUrlBar;
-    var aName;
-    var aBulkOrderedOpen;
-    var aIndex;
-    var aPinned;
-    if (arguments.length == 2 &&
-        typeof arguments[1] == "object" &&
-        !(arguments[1] instanceof Ci.nsIURI)) {
-      let params = arguments[1];
-      aTriggeringPrincipal = params.triggeringPrincipal;
-      aReferrerURI = params.referrerURI;
-      aReferrerPolicy = params.referrerPolicy;
-      aCharset = params.charset;
-      aPostData = params.postData;
-      aOwner = params.ownerTab;
-      aAllowThirdPartyFixup = params.allowThirdPartyFixup;
-      aFromExternal = params.fromExternal;
-      aRelatedToCurrent = params.relatedToCurrent;
-      aSkipAnimation = params.skipAnimation;
-      aAllowMixedContent = params.allowMixedContent;
-      aForceNotRemote = params.forceNotRemote;
-      aPreferredRemoteType = params.preferredRemoteType;
-      aNoReferrer = params.noReferrer;
-      aUserContextId = params.userContextId;
-      aEventDetail = params.eventDetail;
-      aSameProcessAsFrameLoader = params.sameProcessAsFrameLoader;
-      aOriginPrincipal = params.originPrincipal;
-      aDisallowInheritPrincipal = params.disallowInheritPrincipal;
-      aOpener = params.opener;
-      aOpenerBrowser = params.openerBrowser;
-      aCreateLazyBrowser = params.createLazyBrowser;
-      aSkipBackgroundNotify = params.skipBackgroundNotify;
-      aNextTabParentId = params.nextTabParentId;
-      aNoInitialLabel = params.noInitialLabel;
-      aFocusUrlBar = params.focusUrlBar;
-      aName = params.name;
-      aBulkOrderedOpen = params.bulkOrderedOpen;
-      aIndex = params.index;
-      aPinned = params.pinned;
-=======
   /**
    * Must only be used sparingly for content that came from Chrome context
    * If in doubt use addWebTab
@@ -2363,12 +2224,12 @@ window._gBrowser = {
     userContextId,
     recordExecution,
     replayExecution,
+    aPrivate,
   } = {}) {
     // all callers of addTab that pass a params object need to pass
     // a valid triggeringPrincipal.
     if (!triggeringPrincipal) {
       throw new Error("Required argument triggeringPrincipal missing within addTab");
->>>>>>> 6a13909b6641dc8a11d62f292336cd3a0a1d0579
     }
 
 
@@ -2549,19 +2410,11 @@ window._gBrowser = {
       // Private windows are not included because both the label and the
       // icon for the tab would be set incorrectly (see bug 1195981).
       if (aURI == BROWSER_NEW_TAB_URL &&
-<<<<<<< HEAD
-          !aUserContextId &&
           !aPrivate &&
-          !PrivateBrowsingUtils.isWindowPrivate(window)) {
-||||||| merged common ancestors
-          !aUserContextId &&
-          !PrivateBrowsingUtils.isWindowPrivate(window)) {
-=======
           !userContextId &&
           !PrivateBrowsingUtils.isWindowPrivate(window) &&
           !recordExecution &&
           !replayExecution) {
->>>>>>> 6a13909b6641dc8a11d62f292336cd3a0a1d0579
         b = this._getPreloadedBrowser();
         if (b) {
           usingPreloadedContent = true;
@@ -2571,22 +2424,9 @@ window._gBrowser = {
       if (!b) {
         // No preloaded browser found, create one.
         b = this._createBrowser({
+          private: !!aPrivate,
           remoteType,
           uriIsAboutBlank,
-<<<<<<< HEAD
-          userContextId: aUserContextId,
-          sameProcessAsFrameLoader: aSameProcessAsFrameLoader,
-          openerWindow: aOpener,
-          nextTabParentId: aNextTabParentId,
-          name: aName,
-          private: !!aPrivate
-||||||| merged common ancestors
-          userContextId: aUserContextId,
-          sameProcessAsFrameLoader: aSameProcessAsFrameLoader,
-          openerWindow: aOpener,
-          nextTabParentId: aNextTabParentId,
-          name: aName
-=======
           userContextId,
           sameProcessAsFrameLoader,
           openerWindow: opener,
@@ -2594,7 +2434,6 @@ window._gBrowser = {
           name,
           recordExecution,
           replayExecution,
->>>>>>> 6a13909b6641dc8a11d62f292336cd3a0a1d0579
         });
       }
 
@@ -2685,27 +2524,13 @@ window._gBrowser = {
       }
       try {
         b.loadURI(aURI, {
-          flags,
-<<<<<<< HEAD
-          triggeringPrincipal: aTriggeringPrincipal,
-          referrerURI: aNoReferrer ? null : aReferrerURI,
-          referrerPolicy: aReferrerPolicy,
-          charset: aCharset,
-          postData: aPostData,
           ensurePrivate: aPrivate,
-||||||| merged common ancestors
-          triggeringPrincipal: aTriggeringPrincipal,
-          referrerURI: aNoReferrer ? null : aReferrerURI,
-          referrerPolicy: aReferrerPolicy,
-          charset: aCharset,
-          postData: aPostData,
-=======
+          flags,
           triggeringPrincipal,
           referrerURI: noReferrer ? null : referrerURI,
           referrerPolicy,
           charset,
           postData,
->>>>>>> 6a13909b6641dc8a11d62f292336cd3a0a1d0579
         });
       } catch (ex) {
         Cu.reportError(ex);
