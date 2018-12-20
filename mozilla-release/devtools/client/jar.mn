@@ -331,4 +331,4 @@ devtools.jar:
     skin/images/devtools-reps/open-inspector.svg (themes/images/devtools-reps/open-inspector.svg)
 
     # DB-1276. For hiding addons on about:debugging page in release build
-*   modules/devtools/client/aboutdebugging/components/Aboutdebugging.js (aboutdebugging/components/Aboutdebugging.js)
+    modules/devtools/client/aboutdebugging/components/Aboutdebugging.js (aboutdebugging/components/Aboutdebugging.js)
