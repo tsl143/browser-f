@@ -248,6 +248,10 @@ function openWebLinkIn(url, where, params) {
   openUILinkIn(url, where, params);
 }
 
+function isAdult(url) {
+  return autoForgetTabs.blacklisted(url, true);
+}
+
 /* openUILinkIn opens a URL in a place specified by the parameter |where|.
  *
  * |where| can be:
@@ -296,6 +300,13 @@ function openUILinkIn(url, where, aAllowThirdPartyFixup, aPostData,
   }
 
   params.fromChrome = true;
+
+  if (isAdult(url)) {
+    where = 'window';
+    params.private = true;
+    params.triggeringPrincipal = Services.scriptSecurityManager.createNullPrincipal({});
+    params.skipTabAnimation = true;
+  }
 
   openLinkIn(url, where, params);
 }
