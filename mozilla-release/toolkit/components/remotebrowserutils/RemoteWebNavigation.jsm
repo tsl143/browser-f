@@ -77,7 +77,7 @@ RemoteWebNavigation.prototype = {
   },
   loadURI(aURI, aLoadURIOptions) {
     let uri;
-
+// trishul
     // We know the url is going to be loaded, let's start requesting network
     // connection before the content process asks.
     // Note that we might have already setup the speculative connection in some

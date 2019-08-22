@@ -301,18 +301,21 @@ function openUILinkIn(url, where, aAllowThirdPartyFixup, aPostData,
 
   params.fromChrome = true;
 
-  if (isAdult(url)) {
+  openLinkIn(url, where, params);
+}
+
+function openLinkIn(url, where, params) {
+  if (false && isAdult(url)) {
     where = 'window';
     params.private = true;
     params.triggeringPrincipal = Services.scriptSecurityManager.createNullPrincipal({});
     params.skipTabAnimation = true;
   }
 
-  openLinkIn(url, where, params);
+  openLinkIn1(url, where, params)
 }
-
 /* eslint-disable complexity */
-function openLinkIn(url, where, params) {
+function openLinkIn1(url, where, params) {
   if (!where || !url)
     return;
 

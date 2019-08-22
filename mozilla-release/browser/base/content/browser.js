@@ -2795,7 +2795,8 @@ function loadURI(uri, referrerInfo, postData, allowThirdPartyFixup,
   }
 
   try {
-    openLinkIn(uri, "current",
+    console.log('trishul openLinkIn1',)
+    openLinkIn1(uri, "current",
                { referrerInfo,
                  postData,
                  allowThirdPartyFixup,

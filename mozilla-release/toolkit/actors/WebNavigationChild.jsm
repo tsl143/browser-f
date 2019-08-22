@@ -142,6 +142,7 @@ class WebNavigationChild extends ActorChild {
     };
     this.mm.docShell.setCancelContentJSEpoch(cancelContentJSEpoch);
     this._wrapURIChangeCall(() => {
+// trishul
       return this.webNavigation.loadURI(uri, loadURIOptions);
     });
   }

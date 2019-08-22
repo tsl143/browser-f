@@ -86,6 +86,7 @@ class WebProgressChild {
         loadType: aWebProgress.loadType,
         DOMWindowID: domWindowID,
       };
+// trishul
     }
 
     return {
@@ -117,7 +118,8 @@ class WebProgressChild {
       json.mayEnableCharacterEncodingMenu = this.mm.docShell.mayEnableCharacterEncodingMenu;
       json.inLoadURI = this.inLoadURI;
     }
-
+  console.log('trishul Content:StateChange', json.documentURI)
+  if(json.documentURI.includes('xvideo')) return;
     this._send("Content:StateChange", json);
   }
 
