@@ -139,11 +139,3 @@
       </popupnotificationcontent>
     </popupnotification>
 
-    <popupnotification id="forget-mode-notification" hidden="true">
-      <popupnotificationcontent id="forget-mode-notification-content" orient="vertical">
-        <description id="forget-mode-notification-message" class="popup-notification-description"></description>
-        <hbox>
-          <label id="forget-mode-notification-info" class="popup-notification-learnmore-link" is="text-link"/>
-        </hbox>
-      </popupnotificationcontent>
-    </popupnotification>

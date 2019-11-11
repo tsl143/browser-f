@@ -8447,6 +8447,8 @@ var ForgetModeNotification = {
 
     let options = {
       hideClose: true,
+      popupIconURL: "chrome://browser/skin/private-browsing.svg",
+      name: gNavigatorBundle.getString("forgetModeNotification.header"),
       persistent: true,
       eventCallback: state => {
         switch (state) {
@@ -8477,7 +8479,7 @@ var ForgetModeNotification = {
     )).show(
       window.gBrowser.selectedBrowser,
       this._notificationId,
-      gNavigatorBundle.getString("forgetModeNotification.header"),
+      gNavigatorBundle.getString("forgetModeNotification.description"),
       this._notificationIcon,
       mainAction,
       secondaryActions,

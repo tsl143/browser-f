@@ -701,14 +701,34 @@ HttpObserverManager = {
     ){
       channel.suspended = false;
       channel.cancel(Cr.NS_ERROR_ABORT);
-      const { gBrowser, openTrustedLinkIn } = channel.browserElement.ownerGlobal;
+      const { gBrowser, openLinkIn, openTrustedLinkIn } = channel.browserElement.ownerGlobal;
       const { selectedTab, _tabs: tabs = [] } = gBrowser;
       const freshTabURL = CliqzResources.getFreshTabUrl();
-      openTrustedLinkIn(
+      let otherWin = openLinkIn(
         channel.finalURL,
         "window",
-        { private: true }
+        {
+          fromChrome: true,
+          private: true,
+          triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()
+        }
       );
+
+      const delayedStartupFinished = (subject, topic) => {
+        if (
+          topic == "browser-delayed-startup-finished" &&
+          subject == otherWin
+        ) {
+          Services.obs.removeObserver(delayedStartupFinished, topic);
+          this.showForgetModeNotification(otherWin)
+        }
+      };
+    
+      Services.obs.addObserver(
+        delayedStartupFinished,
+        "browser-delayed-startup-finished"
+      );
+
       const { originURL } = channel;
       if (
         originURL === freshTabURL ||
@@ -722,6 +742,56 @@ HttpObserverManager = {
       return true;
     }
     return false;
+  },
+
+  showForgetModeNotification(window) {
+    if (window == null) {
+      return;
+    }
+
+    const gBrowserBundle = Services.strings.createBundle(
+      "chrome://browser/locale/browser.properties"
+    );
+
+    let mainAction = {
+      label: gBrowserBundle.GetStringFromName(
+        "forgetModeNotification.primaryButton.label"
+      ),
+      accessKey: gBrowserBundle.GetStringFromName(
+        "forgetModeNotification.primaryButton.accesskey"
+      ),
+      callback: arg => {
+        let { event } = arg;
+        //Services.prefs.setBoolPref(this.PREF_NOTIFICATION_UI_ENABLED, false);
+      },
+    };
+
+    let options = {
+      hideClose: true,
+      popupIconURL: "chrome://browser/skin/private-browsing.svg",
+      name: gBrowserBundle.GetStringFromName("forgetModeNotification.header"),
+      persistent: true,
+    };
+
+    const shouldSuppress = () => false;
+
+    const { PopupNotifications } = ChromeUtils.import(
+      "resource://gre/modules/PopupNotifications.jsm"
+    );
+    (new PopupNotifications(
+      window.gBrowser,
+      window.document.getElementById("notification-popup"),
+      window.document.getElementById("notification-popup-box"),
+      { shouldSuppress }
+    )).show(
+      window.gBrowser.selectedBrowser,
+      "forget-mode-notification",
+      gBrowserBundle.GetStringFromName("forgetModeNotification.description"),
+      "forget-mode-notification-icon",
+      mainAction,
+      null,
+      options
+    );
   },
 
   observe(subject, topic, data) {
