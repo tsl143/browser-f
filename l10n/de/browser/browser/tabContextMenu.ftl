@@ -5,6 +5,9 @@
 reload-tab =
     .label = Tab neu laden
     .accesskey = d
+reload-in-forget-window =
+    .label = In Vergessen Fenster neu laden
+    .accesskey = F
 select-all-tabs =
     .label = Alle Tabs auswählen
     .accesskey = u

@@ -5,6 +5,9 @@
 reload-tab =
     .label = Reload Tab
     .accesskey = R
+reload-in-forget-window =
+    .label = Reload In Forget Window
+    .accesskey = F
 select-all-tabs =
     .label = Select All Tabs
     .accesskey = S

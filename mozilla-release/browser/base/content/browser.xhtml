@@ -134,6 +134,8 @@
                onpopuphidden="if (event.target == this) TabContextMenu.contextTab = null;">
       <menuitem id="context_reloadTab" data-lazy-l10n-id="reload-tab"
                 oncommand="gBrowser.reloadTab(TabContextMenu.contextTab);"/>
+      <menuitem id="context_openInForgetWindow" data-lazy-l10n-id="reload-in-forget-window"
+                oncommand="ReloadInForgetWindow(TabContextMenu.contextTab);"/>
       <menuitem id="context_reloadSelectedTabs" data-lazy-l10n-id="reload-tabs" hidden="true"
                 oncommand="gBrowser.reloadMultiSelectedTabs();"/>
       <menuitem
@@ -988,6 +990,8 @@
                          tooltiptext="&urlbar.webAuthnAnchor.tooltip;"/>
                   <image id="storage-access-notification-icon" class="notification-anchor-icon storage-access-icon" role="button"
                          tooltiptext="&urlbar.storageAccessAnchor.tooltip;"/>
+                  <image id="forget-mode-notification-icon" class="notification-anchor-icon" role="button"
+                         tooltiptext="Forget Mode Notification Icon"/>
                 </box>
                 <image id="remote-control-icon"
                        tooltiptext="&urlbar.remoteControlNotificationAnchor.tooltip;"/>
@@ -1000,6 +1004,7 @@
                 <label id="urlbar-label-switchtab" class="urlbar-label" value="&urlbar.switchToTab.label;"/>
                 <label id="urlbar-label-extension" class="urlbar-label" value="&urlbar.extension.label;"/>
               </box>
+              <box id="urlbar-forget-mode-box" class="urlbar-forget-mode-box" align="center"/>
               <moz-input-box tooltip="aHTMLTooltip"
                              class="urlbar-input-box"
                              flex="1"

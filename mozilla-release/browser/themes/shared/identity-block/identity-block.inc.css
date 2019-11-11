@@ -124,6 +124,10 @@
   -moz-context-properties: fill, fill-opacity;
 }
 
+#forget-mode-notification-icon {
+  list-style-image: url(chrome://browser/skin/private-browsing.svg);
+}
+
 #tracking-protection-icon {
   margin-inline-start: 0;
 }

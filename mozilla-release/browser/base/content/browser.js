@@ -5254,6 +5254,28 @@ function toOpenWindowByType(inType, uri, features) {
   }
 }
 
+function ReloadInForgetWindow(contextTab) {
+  const otherWin = OpenBrowserWindow({
+    private: true,
+    urlToLoad: contextTab.linkedBrowser.currentURI.spec,
+  });
+
+  const delayedStartupFinished = (subject, topic) => {
+    if (
+      topic == "browser-delayed-startup-finished" &&
+      subject == otherWin
+    ) {
+      Services.obs.removeObserver(delayedStartupFinished, topic);
+      ForgetModeNotification.showIn(otherWin);
+    }
+  };
+
+  Services.obs.addObserver(
+    delayedStartupFinished,
+    "browser-delayed-startup-finished"
+  );
+}
+
 /**
  * Open a new browser window.
  *
@@ -5308,6 +5330,10 @@ function OpenBrowserWindow(options) {
   // for showing the user a useful window as soon as possible.
   if (window.windowState == window.STATE_MAXIMIZED) {
     extraFeatures += ",suppressanimation";
+  }
+
+  if (options && options.urlToLoad) {
+    defaultArgs = options.urlToLoad;
   }
 
   // if and only if the current window is a browser window and it has a document with a character
@@ -8380,6 +8406,82 @@ var IndexedDBPromptHelper = {
         persistent: true,
         hideClose: true,
       }
+    );
+  },
+};
+
+var ForgetModeNotification = {
+  _notificationId: "forget-mode-notification",
+
+  _notificationIcon: "forget-mode-notification-icon",
+
+  showIn: function ForgetModeNotification_showIn(window) {
+    if (window == null) {
+      return;
+    }
+
+    /////////////////////////////////////////////
+    let mainAction = {
+      label: gNavigatorBundle.getString(
+        "forgetModeNotification.primaryButton.label"
+      ),
+      accessKey: gNavigatorBundle.getString(
+        "forgetModeNotification.primaryButton.accesskey"
+      ),
+      callback: arg => {
+        let { event } = arg;
+        //Services.prefs.setBoolPref(this.PREF_NOTIFICATION_UI_ENABLED, false);
+      },
+    };
+    let secondaryActions = [{
+      label: gNavigatorBundle.getString(
+        "forgetModeNotification.secondaryButton.label"
+      ),
+      accessKey: gNavigatorBundle.getString(
+        "forgetModeNotification.secondaryButton.accesskey"
+      ),
+      callback: arg => {
+        //Services.prefs.setBoolPref(this.PREF_NOTIFICATION_UI_ENABLED, false);
+      },
+    }];
+
+    let options = {
+      hideClose: true,
+      persistent: true,
+      eventCallback: state => {
+        switch (state) {
+          case "showing":
+            const doc = window.gBrowser.selectedBrowser.ownerDocument;
+
+            const description = doc.getElementById("forget-mode-notification-message");
+            description.textContent = gNavigatorBundle.getString(
+              "forgetModeNotification.description"
+            );
+            break;
+          case "removed":
+            break;
+        }
+      },
+    };
+
+    const shouldSuppress = () => false;
+
+    const { PopupNotifications } = ChromeUtils.import(
+      "resource://gre/modules/PopupNotifications.jsm"
+    );
+    (new PopupNotifications(
+      window.gBrowser,
+      window.document.getElementById("notification-popup"),
+      window.document.getElementById("notification-popup-box"),
+      { shouldSuppress }
+    )).show(
+      window.gBrowser.selectedBrowser,
+      this._notificationId,
+      gNavigatorBundle.getString("forgetModeNotification.header"),
+      this._notificationIcon,
+      mainAction,
+      secondaryActions,
+      options
     );
   },
 };
