@@ -249,7 +249,7 @@
                        label="&connect.panelUI.label;"
                        class="subviewbutton subviewbutton-iconic"
                        oncommand="openPreferences('connect', {origin: 'ContainersCommand'});"/>
-#ifdef 0
+#ifdef MOZ_SERVICES_SYNC
         <toolbaritem id="appMenu-fxa-status"
                      class="sync-ui-item"
                      defaultlabel="&fxa.menu.signin.label;"
@@ -262,6 +262,8 @@
                         oncommand="gSync.toggleAccountPanel('PanelUI-fxa', this, event)"/>
         </toolbaritem>
         <toolbarseparator class="sync-ui-item"/>
+#endif
+#if 0
         <toolbaritem>
           <toolbarbutton id="appMenu-protection-report-button"
                class="subviewbutton subviewbutton-iconic"

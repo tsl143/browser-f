@@ -631,7 +631,8 @@ project_flag('MOZ_NORMANDY',
              set_as_define=True)
 
 project_flag('MOZ_SERVICES_SYNC',
-             help='Build Sync Services if required')
+             help='Build Sync Services if required',
+             set_as_define=True)
 
 project_flag('MOZ_ANDROID_HISTORY',
              help='Enable Android History instead of Places',

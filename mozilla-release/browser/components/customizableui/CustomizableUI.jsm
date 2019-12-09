@@ -238,6 +238,8 @@ var CustomizableUIInternal = {
 #if 0
       "library-button",
       "sidebar-button",
+#endif
+#ifdef MOZ_SERVICES_SYNC
       "fxa-toolbar-menu-button",
 #endif
     ];
@@ -585,7 +587,7 @@ var CustomizableUIInternal = {
         }
       }
     }
-#if 0
+#ifdef MOZ_SERVICES_SYNC
     // Add the FxA toolbar menu as the right most button item
     if (currentVersion < 16 && gSavedState.placements) {
       let navbarPlacements = gSavedState.placements[CustomizableUI.AREA_NAVBAR];

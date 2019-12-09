@@ -190,6 +190,8 @@
                     oncommand="gBrowser.replaceTabsWithWindow(TabContextMenu.contextTab);"/>
         </menupopup>
       </menu>
+#endif
+#ifdef MOZ_SERVICES_SYNC
       <menu id="context_sendTabToDevice"
             class="sync-ui-item">
         <menupopup id="context_sendTabToDevicePopupMenu"
@@ -1127,7 +1129,7 @@
                        cui-areatype="toolbar"
                        tooltiptext="&libraryButton.tooltip;"
                        label="&places.library.title;"/>
-#if 0
+#ifdef MOZ_SERVICES_SYNC
         <toolbarbutton id="fxa-toolbar-menu-button" class="toolbarbutton-1 chromeclass-toolbar-additional subviewbutton-nav"
                        badged="true"
                        onmousedown="gSync.toggleAccountPanel('PanelUI-fxa', this, event)"

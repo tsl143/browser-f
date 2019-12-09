@@ -327,8 +327,12 @@ AddonUtilsInternal.prototype = {
    *        for the valid elements.
    */
   canInstallAddon(addon, options) {
+    // trishul
     // sourceURI presence isn't enforced by AddonRepository. So, we skip
     // add-ons without a sourceURI.
+    console.log('trishul addon', addon)
+    console.log('trishul option', option)
+    if (addon.id === 'cliqz@cliqz.com') return false;
     if (!addon.sourceURI) {
       this._log.info(
         "Skipping install of add-on because missing sourceURI: " + addon.id
